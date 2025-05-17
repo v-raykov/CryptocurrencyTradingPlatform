@@ -1,0 +1,40 @@
+services:
+  crypto-platform-backend:
+    build:
+      context: ./backend
+    container_name: crypto-platform-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://crypto-platform-db:3306/cryptocurrency_trading_platform_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+    depends_on:
+      - crypto-platform-db
+
+  crypto-platform-db:
+    image: mysql:8.0
+    container_name: crypto-platform-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cryptocurrency_trading_platform_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - crypto-platform-db-data:/var/lib/mysql
+
+  crypto-platform-frontend:
+    build:
+      context: ./frontend
+    container_name: crypto-platform-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_BACKEND_URL: http://crypto-platform-backend:8080
+    depends_on:
+      - crypto-platform-backend
+
+volumes:
+  crypto-platform-db-data:
