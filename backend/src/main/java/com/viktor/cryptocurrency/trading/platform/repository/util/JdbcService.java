@@ -5,11 +5,32 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class JdbcService {
     private final DataSource dataSource;
+
+    public <T> List<T> queryForList(String sql, ResultSetMapper<T> mapper, Object... params) {
+        List<T> results = new ArrayList<>();
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = prepareStatement(conn, sql, params);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                results.add(mapper.map(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return results;
+    }
+
 
     public <T> T queryForObject(String sql, ResultSetMapper<T> mapper, Object... params) {
         try (Connection conn = dataSource.getConnection();

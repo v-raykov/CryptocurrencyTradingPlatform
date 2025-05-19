@@ -1,6 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.repository.util.queries;
 
-import com.viktor.cryptocurrency.trading.platform.model.User;
+import com.viktor.cryptocurrency.trading.platform.model.domain.User;
 import lombok.Getter;
 
 import java.sql.ResultSet;
@@ -13,10 +13,11 @@ public enum UserQueries {
 
     @Getter
     private enum fields {
-        TABLE("users"),
-        ID("id"),
+        TABLE("User"),
+        ID("user_id"),
         USERNAME("username"),
-        PASSWORD("password");
+        PASSWORD("password"),
+        BALANCE("balance");
         private final String name;
 
         fields(String name) {
@@ -34,6 +35,7 @@ public enum UserQueries {
         return new User(
                 rs.getLong(fields.ID.name),
                 rs.getString(fields.USERNAME.name),
-                rs.getString(fields.PASSWORD.name));
+                rs.getString(fields.PASSWORD.name),
+                rs.getBigDecimal(fields.BALANCE.name));
     }
 }

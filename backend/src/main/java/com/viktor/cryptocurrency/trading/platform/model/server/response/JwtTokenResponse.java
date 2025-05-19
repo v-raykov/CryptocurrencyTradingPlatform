@@ -1,4 +1,4 @@
-package com.viktor.cryptocurrency.trading.platform.model.response;
+package com.viktor.cryptocurrency.trading.platform.model.server.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

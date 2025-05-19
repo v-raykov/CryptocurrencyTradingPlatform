@@ -1,4 +1,4 @@
-package com.viktor.cryptocurrency.trading.platform.model.request;
+package com.viktor.cryptocurrency.trading.platform.model.server.request;
 
 public record AuthenticationRequest(String username, String password) {
 }

@@ -1,4 +1,4 @@
-package com.viktor.cryptocurrency.trading.platform.model.kraken.ticker;
+package com.viktor.cryptocurrency.trading.platform.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TickerData {
+public class Crypto {
+    private Long cryptoId;
     private String symbol;
     private double bid;
     private double ask;

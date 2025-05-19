@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.SocketResponse;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.event.PairsUpdatedEvent;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.ticker.TickerSubscriptionRequest;
-import com.viktor.cryptocurrency.trading.platform.model.kraken.ticker.TickerData;
-import com.viktor.cryptocurrency.trading.platform.web.service.KrakenDataService;
+import com.viktor.cryptocurrency.trading.platform.model.domain.Crypto;
+import com.viktor.cryptocurrency.trading.platform.web.service.CryptoService;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -21,11 +21,11 @@ import java.util.List;
 public class TickerClient extends WebSocketClient {
     private static final Logger logger = LoggerFactory.getLogger(TickerClient.class);
     private final ObjectMapper objectMapper;
-    private final KrakenDataService dataService;
+    private final CryptoService dataService;
 
     private List<String> pairs;
 
-    public TickerClient(URI socketUri, ObjectMapper objectMapper, KrakenDataService dataService) {
+    public TickerClient(URI socketUri, ObjectMapper objectMapper, CryptoService dataService) {
         super(socketUri);
         this.objectMapper = objectMapper;
         this.dataService = dataService;
@@ -71,9 +71,9 @@ public class TickerClient extends WebSocketClient {
 
     private void processMessage(String message) {
         try {
-            SocketResponse<TickerData> response = parseMessage(message);
+            SocketResponse<Crypto> response = parseMessage(message);
             if (response != null) {
-                dataService.saveData(response.getData());
+                dataService.saveCrypto(response.getData());
             }
         } catch (Exception e) {
             logger.error("Error processing message: {}", message, e);
@@ -105,10 +105,10 @@ public class TickerClient extends WebSocketClient {
         return objectMapper.writeValueAsString(subscriptionRequest);
     }
 
-    private SocketResponse<TickerData> parseMessage(String message) {
+    private SocketResponse<Crypto> parseMessage(String message) {
         try {
             return objectMapper.readValue(message, objectMapper.getTypeFactory()
-                    .constructParametricType(SocketResponse.class, TickerData.class));
+                    .constructParametricType(SocketResponse.class, Crypto.class));
         } catch (JsonProcessingException e) {
             logger.error("Failed to parse message: {}", message, e);
             return null;

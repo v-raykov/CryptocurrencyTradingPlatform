@@ -1,6 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.web.service;
 
-import com.viktor.cryptocurrency.trading.platform.model.User;
+import com.viktor.cryptocurrency.trading.platform.model.domain.User;
 import com.viktor.cryptocurrency.trading.platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;

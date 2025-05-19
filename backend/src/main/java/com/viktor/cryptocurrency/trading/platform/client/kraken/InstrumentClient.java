@@ -23,11 +23,13 @@ public class InstrumentClient extends WebSocketClient {
     private static final Logger logger = LoggerFactory.getLogger(InstrumentClient.class);
     private final ObjectMapper objectMapper;
     private final ApplicationEventPublisher publisher;
+    private final String currencySuffix;
 
-    public InstrumentClient(URI serverUri, ObjectMapper objectMapper, ApplicationEventPublisher publisher) {
-        super(serverUri);
+    public InstrumentClient(URI socketUri, ObjectMapper objectMapper, ApplicationEventPublisher publisher, String currencySuffix) {
+        super(socketUri);
         this.objectMapper = objectMapper;
         this.publisher = publisher;
+        this.currencySuffix = currencySuffix;
     }
 
     @PostConstruct
@@ -73,6 +75,7 @@ public class InstrumentClient extends WebSocketClient {
 
     private List<String> getTopPairs(List<Pair> pairs) {
         return pairs.stream()
+                .filter(pair -> pair.getSymbol().endsWith("/" + currencySuffix))
                 .limit(20)
                 .map(Pair::getSymbol)
                 .collect(Collectors.toList());

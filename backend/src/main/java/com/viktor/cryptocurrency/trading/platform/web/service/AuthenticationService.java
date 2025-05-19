@@ -1,9 +1,9 @@
 package com.viktor.cryptocurrency.trading.platform.web.service;
 
 import com.viktor.cryptocurrency.trading.platform.config.security.jwt.JwtUtils;
-import com.viktor.cryptocurrency.trading.platform.model.User;
-import com.viktor.cryptocurrency.trading.platform.model.request.AuthenticationRequest;
-import com.viktor.cryptocurrency.trading.platform.model.response.JwtTokenResponse;
+import com.viktor.cryptocurrency.trading.platform.model.domain.User;
+import com.viktor.cryptocurrency.trading.platform.model.server.request.AuthenticationRequest;
+import com.viktor.cryptocurrency.trading.platform.model.server.response.JwtTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
