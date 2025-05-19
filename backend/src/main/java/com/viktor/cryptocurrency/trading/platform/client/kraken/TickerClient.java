@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import java.net.URI;
 import java.util.List;
 
-@Component
 public class TickerClient extends WebSocketClient {
     private static final Logger logger = LoggerFactory.getLogger(TickerClient.class);
     private final ObjectMapper objectMapper;
