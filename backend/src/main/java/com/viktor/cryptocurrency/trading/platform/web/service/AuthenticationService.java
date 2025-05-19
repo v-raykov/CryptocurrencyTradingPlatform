@@ -1,13 +1,12 @@
 package com.viktor.cryptocurrency.trading.platform.web.service;
 
+import com.viktor.cryptocurrency.trading.platform.config.security.jwt.JwtUtils;
 import com.viktor.cryptocurrency.trading.platform.model.User;
 import com.viktor.cryptocurrency.trading.platform.model.request.AuthenticationRequest;
-import com.viktor.cryptocurrency.trading.platform.repository.UserRepository;
+import com.viktor.cryptocurrency.trading.platform.model.response.JwtTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +15,16 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
 
     public void register(AuthenticationRequest request) {
-        userRepository.save(new User(request.username(), passwordEncoder.encode(request.password())));
+        userService.save(new User(request.username(), passwordEncoder.encode(request.password())));
     }
 
-    public void login(AuthenticationRequest request) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.username(), request.password())
-        );
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
+    public JwtTokenResponse login(AuthenticationRequest details) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(details.username(), details.password()));
+        userService.loadUserByUsername(details.username());
+        return new JwtTokenResponse(jwtUtils.generateToken(details.username()));
     }
 }
