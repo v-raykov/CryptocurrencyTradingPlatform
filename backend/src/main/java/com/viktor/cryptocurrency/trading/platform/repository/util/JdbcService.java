@@ -1,6 +1,9 @@
 package com.viktor.cryptocurrency.trading.platform.repository.util;
 
+import com.viktor.cryptocurrency.trading.platform.config.exception.DatabaseException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -12,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JdbcService {
     private final DataSource dataSource;
+    private static final Logger logger = LoggerFactory.getLogger(JdbcService.class);
 
     public <T> List<T> queryForList(String sql, ResultSetMapper<T> mapper, Object... params) {
         List<T> results = new ArrayList<>();
@@ -25,9 +29,9 @@ public class JdbcService {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logError(sql);
+            throw new DatabaseException(e);
         }
-
         return results;
     }
 
@@ -41,7 +45,8 @@ public class JdbcService {
             return mapper.map(rs);
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logError(sql);
+            throw new DatabaseException(e);
         }
     }
 
@@ -52,7 +57,8 @@ public class JdbcService {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logError(sql);
+            throw new DatabaseException(e);
         }
     }
 
@@ -67,5 +73,9 @@ public class JdbcService {
     @FunctionalInterface
     public interface ResultSetMapper<T> {
         T map(ResultSet rs) throws SQLException;
+    }
+
+    private void logError(String message) {
+        logger.error("Failed to execute query {}", message);
     }
 }

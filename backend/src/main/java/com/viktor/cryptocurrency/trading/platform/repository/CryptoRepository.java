@@ -23,14 +23,14 @@ public class CryptoRepository {
     public void save(Crypto crypto) {
         jdbcService.executeUpdate(
                 CryptoQueries.SAVE_CRYPTO.getQuery(),
+                crypto.getCryptoId(),
                 crypto.getSymbol(),
                 crypto.getBid(),
                 crypto.getAsk(),
-                crypto.getVolume(),
                 crypto.getLast(),
+                crypto.getVolume(),
                 crypto.getLow(),
-                crypto.getHigh()
-        );
+                crypto.getHigh());
     }
 
     public Crypto findCryptoBySymbol(String symbol) {

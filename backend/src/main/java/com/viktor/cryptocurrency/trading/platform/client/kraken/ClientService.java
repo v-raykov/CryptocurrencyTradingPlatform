@@ -1,12 +1,9 @@
-package com.viktor.cryptocurrency.trading.platform.service;
+package com.viktor.cryptocurrency.trading.platform.client.kraken;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.viktor.cryptocurrency.trading.platform.client.kraken.InstrumentClient;
-import com.viktor.cryptocurrency.trading.platform.client.kraken.TickerClient;
 import com.viktor.cryptocurrency.trading.platform.web.service.CryptoService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.context.ApplicationEventPublisher;
 
