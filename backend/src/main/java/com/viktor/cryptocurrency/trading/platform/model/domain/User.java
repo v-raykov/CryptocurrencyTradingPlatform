@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 public class User implements UserDetails {
-    private Long userId;
+    private long userId;
     private String username;
     private String password;
     private BigDecimal balance;

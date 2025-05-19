@@ -10,8 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Portfolio {
-    private int portfolioId;
-    private int userId;
-    private int cryptoId;
+    private long portfolioId;
+    private long userId;
+    private long cryptoId;
     private double amount;
 }

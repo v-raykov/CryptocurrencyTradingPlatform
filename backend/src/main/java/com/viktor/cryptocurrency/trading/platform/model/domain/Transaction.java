@@ -12,9 +12,9 @@ import java.security.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Transaction {
-    private int transactionId;
-    private int userId;
-    private int cryptoId;
+    private long transactionId;
+    private long userId;
+    private long cryptoId;
     private double amount;
     private double priceAtTransaction;
     private TransactionType transactionType;
