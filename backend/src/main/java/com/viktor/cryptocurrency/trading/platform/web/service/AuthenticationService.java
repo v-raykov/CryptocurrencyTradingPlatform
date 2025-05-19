@@ -1,7 +1,7 @@
 package com.viktor.cryptocurrency.trading.platform.web.service;
 
 import com.viktor.cryptocurrency.trading.platform.config.security.jwt.JwtUtils;
-import com.viktor.cryptocurrency.trading.platform.model.domain.User;
+import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.model.server.request.AuthenticationRequest;
 import com.viktor.cryptocurrency.trading.platform.model.server.response.JwtTokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,16 +15,16 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
+    private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
     public void register(AuthenticationRequest request) {
-        userService.save(new User(request.username(), passwordEncoder.encode(request.password())));
+        userDetailsService.save(new User(request.username(), passwordEncoder.encode(request.password())));
     }
 
     public JwtTokenResponse login(AuthenticationRequest details) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(details.username(), details.password()));
-        userService.loadUserByUsername(details.username());
+        userDetailsService.loadUserByUsername(details.username());
         return new JwtTokenResponse(jwtUtils.generateToken(details.username()));
     }
 }

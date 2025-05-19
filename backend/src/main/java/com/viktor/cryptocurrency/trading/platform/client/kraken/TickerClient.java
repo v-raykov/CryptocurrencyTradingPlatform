@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.SocketResponse;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.event.PairsUpdatedEvent;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.ticker.TickerSubscriptionRequest;
-import com.viktor.cryptocurrency.trading.platform.model.domain.Crypto;
+import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Crypto;
 import com.viktor.cryptocurrency.trading.platform.web.service.CryptoService;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;

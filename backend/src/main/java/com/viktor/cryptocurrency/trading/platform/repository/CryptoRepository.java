@@ -1,6 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.repository;
 
-import com.viktor.cryptocurrency.trading.platform.model.domain.Crypto;
+import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Crypto;
 import com.viktor.cryptocurrency.trading.platform.repository.util.JdbcService;
 import com.viktor.cryptocurrency.trading.platform.repository.util.queries.CryptoQueries;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +31,12 @@ public class CryptoRepository {
                 crypto.getLow(),
                 crypto.getHigh()
         );
+    }
+
+    public Crypto findCryptoBySymbol(String symbol) {
+        return jdbcService.queryForObject(
+                CryptoQueries.GET_CRYPTO_BY_SYMBOL.getQuery(),
+                CryptoQueries::map,
+                symbol);
     }
 }

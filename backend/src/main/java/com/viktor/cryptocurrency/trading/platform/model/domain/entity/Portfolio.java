@@ -1,9 +1,11 @@
-package com.viktor.cryptocurrency.trading.platform.model.domain;
+package com.viktor.cryptocurrency.trading.platform.model.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -13,5 +15,5 @@ public class Portfolio {
     private long portfolioId;
     private long userId;
     private long cryptoId;
-    private double amount;
+    private BigDecimal amount;
 }

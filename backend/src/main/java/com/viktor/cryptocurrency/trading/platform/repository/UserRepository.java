@@ -1,6 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.repository;
 
-import com.viktor.cryptocurrency.trading.platform.model.domain.User;
+import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.repository.util.*;
 import com.viktor.cryptocurrency.trading.platform.repository.util.queries.UserQueries;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public class UserRepository {
     private final JdbcService jdbcService;
 
-    public User getUserByUsername(String username) {
+    public User findUserByUsername(String username) {
         try {
             return jdbcService.queryForObject(
                     UserQueries.GET_USER_BY_USERNAME.getQuery(),

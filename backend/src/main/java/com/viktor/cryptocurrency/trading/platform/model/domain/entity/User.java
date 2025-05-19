@@ -1,4 +1,4 @@
-package com.viktor.cryptocurrency.trading.platform.model.domain;
+package com.viktor.cryptocurrency.trading.platform.model.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

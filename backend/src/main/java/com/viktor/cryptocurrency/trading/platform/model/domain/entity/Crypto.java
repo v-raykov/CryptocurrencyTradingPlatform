@@ -1,4 +1,4 @@
-package com.viktor.cryptocurrency.trading.platform.model.domain;
+package com.viktor.cryptocurrency.trading.platform.model.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
