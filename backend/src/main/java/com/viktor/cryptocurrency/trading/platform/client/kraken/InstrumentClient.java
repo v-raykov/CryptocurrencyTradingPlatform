@@ -77,11 +77,10 @@ public class InstrumentClient extends WebSocketClient {
 
     private void subscribeToInstrumentPairs() {
         try {
-            String message = objectMapper.writeValueAsString(new InstrumentSubscriptionRequest());
-            send(message);
-            logger.info("Subscription request sent: {}", message);
+            send(objectMapper.writeValueAsString(new InstrumentSubscriptionRequest()));
+            logger.info("Subscription request sent.");
         } catch (Exception e) {
-            logger.error("Failed to subscribe to pairs: {}", e.getMessage(), e);
+            logger.error("Failed to subscribe to pairs.", e);
         }
     }
 

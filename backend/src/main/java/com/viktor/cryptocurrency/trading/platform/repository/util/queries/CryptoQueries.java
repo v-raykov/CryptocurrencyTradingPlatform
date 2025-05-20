@@ -54,7 +54,7 @@ public enum CryptoQueries {
     private static String buildUpsertQuery() {
         List<fields> fieldsToInsert = getFieldsToInsert();
         return String.format(
-                "INSERT INTO %s (%s)\nVALUES (%s)\nON DUPLICATE KEY UPDATE\n    %s;",
+                "INSERT INTO %s (%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s;",
                 getTableName(),
                 buildColumns(fieldsToInsert),
                 String.join(", ", Collections.nCopies(fieldsToInsert.size(), "?")),
@@ -78,7 +78,7 @@ public enum CryptoQueries {
         return columns.stream()
                 .filter(f -> f != fields.SYMBOL)
                 .map(f -> String.format("%s = VALUES(%s)", f.getName(), f.getName()))
-                .collect(Collectors.joining(",\n    "));
+                .collect(Collectors.joining(", "));
     }
 
     private static String getTableName() {

@@ -12,12 +12,10 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.util.List;
 
-@Component
 public class TickerClient extends WebSocketClient {
     private static final Logger logger = LoggerFactory.getLogger(TickerClient.class);
     private final ObjectMapper objectMapper;
@@ -69,6 +67,15 @@ public class TickerClient extends WebSocketClient {
         }
     }
 
+    private void subscribeToPairs() {
+        try {
+            send(objectMapper.writeValueAsString(new TickerSubscriptionRequest(pairs)));
+            logger.info("Subscription request sent.");
+        } catch (JsonProcessingException e) {
+            logger.error("Failed to serialize subscription request", e);
+        }
+    }
+
     private void processMessage(String message) {
         try {
             SocketResponse<Crypto> response = parseMessage(message);
@@ -78,19 +85,6 @@ public class TickerClient extends WebSocketClient {
         } catch (Exception e) {
             logger.error("Error processing message: {}", message, e);
         }
-    }
-
-    private void subscribeToPairs() {
-        try {
-            send(createSubscriptionMessage());
-            logger.info("Subscription request sent.");
-        } catch (JsonProcessingException e) {
-            logger.error("Failed to serialize subscription request", e);
-        }
-    }
-
-    private String createSubscriptionMessage() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(new TickerSubscriptionRequest(pairs));
     }
 
     private SocketResponse<Crypto> parseMessage(String message) {

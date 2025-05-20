@@ -32,4 +32,8 @@ public class UserRepository {
                 user.getPassword()
         );
     }
+
+    public void resetUserBalance(User user) {
+        jdbcService.executeUpdate(UserQueries.RESET_USER_BALANCE.getQuery(), user.getUserId());
+    }
 }

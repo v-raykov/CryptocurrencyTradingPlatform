@@ -1,6 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.config.security.jwt;
 
-import com.viktor.cryptocurrency.trading.platform.web.service.UserDetailsService;
+import com.viktor.cryptocurrency.trading.platform.web.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
     private final Map<String, UserDetails> userDetailsCache = new ConcurrentHashMap<>();
 
@@ -54,7 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private UserDetails getUserDetailsFromCacheOrDatabase(String username) {
-        return userDetailsCache.computeIfAbsent(username, userDetailsService::loadUserByUsername);
+        return userDetailsCache.computeIfAbsent(username, userService::loadUserByUsername);
     }
 
     private void setAuthentication(HttpServletRequest request, UserDetails userDetails) {

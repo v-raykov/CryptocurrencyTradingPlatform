@@ -15,16 +15,16 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
     private final JwtUtils jwtUtils;
 
     public void register(AuthenticationRequest request) {
-        userDetailsService.save(new User(request.username(), passwordEncoder.encode(request.password())));
+        userService.save(new User(request.username(), passwordEncoder.encode(request.password())));
     }
 
     public JwtTokenResponse login(AuthenticationRequest details) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(details.username(), details.password()));
-        userDetailsService.loadUserByUsername(details.username());
+        userService.loadUserByUsername(details.username());
         return new JwtTokenResponse(jwtUtils.generateToken(details.username()));
     }
 }
