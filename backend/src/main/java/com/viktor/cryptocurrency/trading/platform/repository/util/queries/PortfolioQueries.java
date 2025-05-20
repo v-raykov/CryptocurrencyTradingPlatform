@@ -8,7 +8,9 @@ import java.sql.SQLException;
 
 @Getter
 public enum PortfolioQueries {
-    FIND_BY_USER(String.format("SELECT * FROM %s WHERE %s = ?", getTableName(), fields.USER_ID.name));
+    FIND_BY_USER(String.format("SELECT * FROM %s WHERE %s = ?", getTableName(), fields.USER_ID.name)),
+    FIND_BY_USER_AND_CRYPTO_ID(String.format("SELECT p.* FROM %s p WHERE p.%s = ? AND p.%s = ?",
+            getTableName(), fields.USER_ID.name, fields.CRYPTO_ID.name));
 
     enum fields {
         PORTFOLIO_ID("portfolio_id"),

@@ -7,7 +7,7 @@ CREATE TABLE User
     balance  DECIMAL(20, 8) DEFAULT 1000.0
 );
 
--- Crypto Table (Updated with BIGINT IDs)
+-- Crypto Table
 CREATE TABLE Crypto
 (
     crypto_id BIGINT AUTO_INCREMENT PRIMARY KEY,

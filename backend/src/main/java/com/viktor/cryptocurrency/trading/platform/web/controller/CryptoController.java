@@ -24,4 +24,9 @@ public class CryptoController {
     public void buyCrypto(@AuthenticationPrincipal User user, @RequestParam String symbol, @RequestParam BigDecimal amount) {
         cryptoService.buyCrypto(user, symbol, amount);
     }
+
+    @PostMapping("/crypto/sell")
+    public void sellCrypto(@AuthenticationPrincipal User user, @RequestParam String symbol, @RequestParam BigDecimal amount) {
+        cryptoService.sellCrypto(user, symbol, amount);
+    }
 }

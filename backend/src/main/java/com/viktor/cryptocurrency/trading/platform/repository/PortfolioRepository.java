@@ -14,11 +14,19 @@ import java.util.List;
 public class PortfolioRepository {
     private final JdbcService jdbcService;
 
-    public List<Portfolio> findByUser(User user) {
+    public List<Portfolio> findByUserId(User user) {
         return jdbcService.queryForList(
                 PortfolioQueries.FIND_BY_USER.getQuery(),
                 PortfolioQueries::map,
                 user.getUserId()
         );
+    }
+
+    public Portfolio findPortfolioByUserIdAndSymbol(long userId, long cryptoId) {
+        return jdbcService.queryForObject(
+                PortfolioQueries.FIND_BY_USER_AND_CRYPTO_ID.getQuery(),
+                PortfolioQueries::map,
+                userId,
+                cryptoId);
     }
 }

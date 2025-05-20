@@ -1,6 +1,7 @@
 package com.viktor.cryptocurrency.trading.platform.config.exception.handler;
 
 import com.viktor.cryptocurrency.trading.platform.config.exception.DatabaseException;
+import com.viktor.cryptocurrency.trading.platform.config.exception.InsufficientCryptoAmountException;
 import com.viktor.cryptocurrency.trading.platform.config.exception.InsufficientFundsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<ErrorResponse> handleInsufficientFundsException(Exception ex) {
+        var status = HttpStatus.CONFLICT;
+        return ResponseEntity.status(status).body(new ErrorResponse(status, ex.getMessage()));
+    }
+
+    @ExceptionHandler(InsufficientCryptoAmountException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientCryptoAmountException(Exception ex) {
         var status = HttpStatus.CONFLICT;
         return ResponseEntity.status(status).body(new ErrorResponse(status, ex.getMessage()));
     }

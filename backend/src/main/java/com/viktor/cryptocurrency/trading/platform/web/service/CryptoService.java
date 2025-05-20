@@ -5,6 +5,7 @@ import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Crypto;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Transaction;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.model.domain.event.CryptoTransactionEvent;
+import com.viktor.cryptocurrency.trading.platform.model.domain.event.SellCryptoRequestedEvent;
 import com.viktor.cryptocurrency.trading.platform.repository.CryptoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -43,10 +44,20 @@ public class CryptoService {
         )));
     }
 
+    public void sellCrypto(User user, String symbol, BigDecimal amount) {
+        Crypto crypto = cryptoRepository.findCryptoBySymbol(symbol);
+        publisher.publishEvent(new SellCryptoRequestedEvent(new Transaction(
+                user.getUserId(),
+                crypto.getCryptoId(),
+                amount,
+                BigDecimal.valueOf(crypto.getAsk()),
+                Transaction.TransactionType.SELL
+        )));
+    }
+
     private void validatePurchase(BigDecimal balance, BigDecimal cost, BigDecimal amount) {
         if (balance.compareTo(cost) < 0) {
             throw new InsufficientFundsException(amount.toString());
         }
     }
-
 }
