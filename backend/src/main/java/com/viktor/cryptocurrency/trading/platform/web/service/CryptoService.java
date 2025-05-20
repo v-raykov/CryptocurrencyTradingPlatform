@@ -28,8 +28,12 @@ public class CryptoService {
         return cryptoRepository.getAll();
     }
 
-    public void buyCrypto(User user, String symbol, BigDecimal amount) {
-        Crypto crypto = cryptoRepository.findCryptoBySymbol(symbol);
+    public Crypto getCryptoById(Long id) {
+        return cryptoRepository.findCryptoById(id);
+    }
+
+    public void buyCrypto(User user, long id, BigDecimal amount) {
+        Crypto crypto = cryptoRepository.findCryptoById(id);
         BigDecimal ask = BigDecimal.valueOf(crypto.getAsk());
         BigDecimal totalCost = ask.multiply(amount);
 
@@ -44,8 +48,8 @@ public class CryptoService {
         )));
     }
 
-    public void sellCrypto(User user, String symbol, BigDecimal amount) {
-        Crypto crypto = cryptoRepository.findCryptoBySymbol(symbol);
+    public void sellCrypto(User user, long id, BigDecimal amount) {
+        Crypto crypto = cryptoRepository.findCryptoById(id);
         publisher.publishEvent(new SellCryptoRequestedEvent(new Transaction(
                 user.getUserId(),
                 crypto.getCryptoId(),

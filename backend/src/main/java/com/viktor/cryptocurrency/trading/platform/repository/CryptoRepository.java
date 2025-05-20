@@ -20,6 +20,14 @@ public class CryptoRepository {
         );
     }
 
+    public Crypto findCryptoById(Long id) {
+        return jdbcService.queryForObject(
+                CryptoQueries.GET_CRYPTO_BY_ID.getQuery(),
+                CryptoQueries::map,
+                id
+        );
+    }
+
     public void save(Crypto crypto) {
         jdbcService.executeUpdate(
                 CryptoQueries.SAVE_CRYPTO.getQuery(),
@@ -30,12 +38,5 @@ public class CryptoRepository {
                 crypto.getVolume(),
                 crypto.getLow(),
                 crypto.getHigh());
-    }
-
-    public Crypto findCryptoBySymbol(String symbol) {
-        return jdbcService.queryForObject(
-                CryptoQueries.GET_CRYPTO_BY_SYMBOL.getQuery(),
-                CryptoQueries::map,
-                symbol);
     }
 }
