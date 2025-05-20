@@ -30,8 +30,8 @@ public class CryptoService {
 
     public void buyCrypto(User user, String symbol, BigDecimal amount) {
         Crypto crypto = cryptoRepository.findCryptoBySymbol(symbol);
-        BigDecimal bid = BigDecimal.valueOf(crypto.getBid());
-        BigDecimal totalCost = bid.multiply(amount);
+        BigDecimal ask = BigDecimal.valueOf(crypto.getAsk());
+        BigDecimal totalCost = ask.multiply(amount);
 
         validatePurchase(user.getBalance(), totalCost, amount);
 
@@ -39,7 +39,7 @@ public class CryptoService {
                 user.getUserId(),
                 crypto.getCryptoId(),
                 amount,
-                bid,
+                ask,
                 Transaction.TransactionType.BUY
         )));
     }
@@ -50,7 +50,7 @@ public class CryptoService {
                 user.getUserId(),
                 crypto.getCryptoId(),
                 amount,
-                BigDecimal.valueOf(crypto.getAsk()),
+                BigDecimal.valueOf(crypto.getBid()),
                 Transaction.TransactionType.SELL
         )));
     }
