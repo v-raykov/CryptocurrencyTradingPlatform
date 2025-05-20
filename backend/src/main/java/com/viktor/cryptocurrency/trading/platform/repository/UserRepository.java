@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepository {
@@ -35,5 +37,9 @@ public class UserRepository {
 
     public void resetUserBalance(User user) {
         jdbcService.executeUpdate(UserQueries.RESET_USER_BALANCE.getQuery(), user.getUserId());
+    }
+
+    public void updateBalance(User user, BigDecimal amount) {
+        jdbcService.executeUpdate(UserQueries.UPDATE_USER_BALANCE.getQuery(), user.getUserId(), amount);
     }
 }

@@ -11,27 +11,28 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
+@RequestMapping("/crypto")
 @RequiredArgsConstructor
 public class CryptoController {
     private final CryptoService cryptoService;
 
-    @GetMapping("/crypto")
+    @GetMapping
     public List<Crypto> getAllCryptos() {
         return cryptoService.getAllCryptos();
     }
 
-    @GetMapping("/crypto/{id}")
+    @GetMapping("/{id}")
     public Crypto getCryptoById(@PathVariable long id) {
         return cryptoService.getCryptoById(id);
     }
 
-    @PostMapping("/crypto/buy")
-    public void buyCrypto(@AuthenticationPrincipal User user, @RequestParam long cryptoId, @RequestParam BigDecimal amount) {
-        cryptoService.buyCrypto(user, cryptoId, amount);
+    @PostMapping("/{id}/buy")
+    public void buyCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
+        cryptoService.buyCrypto(user, id, amount);
     }
 
-    @PostMapping("/crypto/sell")
-    public void sellCrypto(@AuthenticationPrincipal User user, @RequestParam long cryptoId, @RequestParam BigDecimal amount) {
-        cryptoService.sellCrypto(user, cryptoId, amount);
+    @PostMapping("/{id}/sell")
+    public void sellCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
+        cryptoService.sellCrypto(user, id, amount);
     }
 }

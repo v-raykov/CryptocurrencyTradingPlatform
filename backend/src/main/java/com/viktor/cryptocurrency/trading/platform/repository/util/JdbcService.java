@@ -1,6 +1,7 @@
 package com.viktor.cryptocurrency.trading.platform.repository.util;
 
 import com.viktor.cryptocurrency.trading.platform.config.exception.DatabaseException;
+import com.viktor.cryptocurrency.trading.platform.config.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class JdbcService {
              PreparedStatement ps = prepareStatement(conn, sql, params);
              ResultSet rs = ps.executeQuery()) {
 
-            if (!rs.next()) throw new RuntimeException("No results found");
+            if (!rs.next()) throw new EntityNotFoundException();
             return mapper.map(rs);
 
         } catch (SQLException e) {

@@ -8,9 +8,7 @@ import com.viktor.cryptocurrency.trading.platform.web.service.TransactionService
 import com.viktor.cryptocurrency.trading.platform.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,8 +36,13 @@ public class UserController {
         return userService.getUserBalance(user);
     }
 
-    @GetMapping("/balance/reset")
+    @PutMapping("/balance/reset")
     public void resetBalance(@AuthenticationPrincipal User user) {
         userService.resetUserBalance(user);
+    }
+
+    @PutMapping("/balance/update")
+    public void updateBalance(@AuthenticationPrincipal User user, @RequestParam BigDecimal amount) {
+        userService.updateBalance(user, amount);
     }
 }

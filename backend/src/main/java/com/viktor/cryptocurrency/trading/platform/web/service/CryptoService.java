@@ -1,6 +1,7 @@
 package com.viktor.cryptocurrency.trading.platform.web.service;
 
 import com.viktor.cryptocurrency.trading.platform.config.exception.InsufficientFundsException;
+import com.viktor.cryptocurrency.trading.platform.config.exception.InvalidAmountException;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Crypto;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Transaction;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
@@ -33,12 +34,11 @@ public class CryptoService {
     }
 
     public void buyCrypto(User user, long id, BigDecimal amount) {
+        validateAmount(amount);
         Crypto crypto = cryptoRepository.findCryptoById(id);
         BigDecimal ask = BigDecimal.valueOf(crypto.getAsk());
         BigDecimal totalCost = ask.multiply(amount);
-
         validatePurchase(user.getBalance(), totalCost, amount);
-
         publisher.publishEvent(new CryptoTransactionEvent(new Transaction(
                 user.getUserId(),
                 crypto.getCryptoId(),
@@ -49,14 +49,22 @@ public class CryptoService {
     }
 
     public void sellCrypto(User user, long id, BigDecimal amount) {
+        validateAmount(amount);
         Crypto crypto = cryptoRepository.findCryptoById(id);
+        BigDecimal bid = BigDecimal.valueOf(crypto.getBid());
         publisher.publishEvent(new SellCryptoRequestedEvent(new Transaction(
                 user.getUserId(),
                 crypto.getCryptoId(),
                 amount,
-                BigDecimal.valueOf(crypto.getBid()),
+                bid,
                 Transaction.TransactionType.SELL
         )));
+    }
+
+    private void validateAmount(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidAmountException();
+        }
     }
 
     private void validatePurchase(BigDecimal balance, BigDecimal cost, BigDecimal amount) {

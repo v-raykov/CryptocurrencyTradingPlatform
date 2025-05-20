@@ -30,4 +30,8 @@ public class UserService implements UserDetailsService {
     public void resetUserBalance(User user) {
         userRepository.resetUserBalance(user);
     }
+
+    public void updateBalance(User user, BigDecimal amount) {
+        userRepository.updateBalance(user, amount);
+    }
 }
