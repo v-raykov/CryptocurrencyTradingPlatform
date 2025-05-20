@@ -2,11 +2,12 @@ package com.viktor.cryptocurrency.trading.platform.client.kraken;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.SocketResponse;
-import com.viktor.cryptocurrency.trading.platform.model.kraken.event.PairsUpdatedEvent;
+import com.viktor.cryptocurrency.trading.platform.model.kraken.event.InstrumentReconnectionEvent;
+import com.viktor.cryptocurrency.trading.platform.model.kraken.event.TickerReconnectionEvent;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.instrument.InstrumentData;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.instrument.InstrumentSubscriptionRequest;
 import com.viktor.cryptocurrency.trading.platform.model.kraken.instrument.Pair;
-import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -23,19 +24,14 @@ public class InstrumentClient extends WebSocketClient {
     private final ApplicationEventPublisher publisher;
     private final String currencySuffix;
 
+    @Getter
+    private List<String> pairs;
+
     public InstrumentClient(URI socketUri, ObjectMapper objectMapper, ApplicationEventPublisher publisher, String currencySuffix) {
         super(socketUri);
         this.objectMapper = objectMapper;
         this.publisher = publisher;
         this.currencySuffix = currencySuffix;
-    }
-
-    @PostConstruct
-    public void connectToWebSocket() {
-        if (!isOpen()) {
-            logger.info("Attempting to connect to Instrument WebSocket...");
-            connectWithRetry();
-        }
     }
 
     @Override
@@ -54,7 +50,7 @@ public class InstrumentClient extends WebSocketClient {
         logger.info("WebSocket closed. Code: {}, Reason: {}, Remote: {}", code, reason, remote);
         if (code != 1000) {
             logger.warn("WebSocket closed abnormally. Attempting reconnection...");
-            reconnectWithRetry();
+            publisher.publishEvent(new InstrumentReconnectionEvent());
         }
     }
 
@@ -66,8 +62,8 @@ public class InstrumentClient extends WebSocketClient {
     private void handleMessage(String message) {
         SocketResponse<InstrumentData> response = parseMessage(message);
         if (response != null) {
-            List<String> topPairs = getTopPairs(response.getData().getPairs());
-            publisher.publishEvent(new PairsUpdatedEvent(topPairs));
+            pairs = getTopPairs(response.getData().getPairs());
+            publisher.publishEvent(new TickerReconnectionEvent());
         }
     }
 
@@ -97,18 +93,5 @@ public class InstrumentClient extends WebSocketClient {
             logger.error("Failed to parse message: {}", message, e);
             return null;
         }
-    }
-
-    private void connectWithRetry() {
-        try {
-            RetryHandler.retry(this::connect);
-        } catch (Exception e) {
-            logger.error("WebSocket connection failed after retries.", e);
-        }
-    }
-
-    private void reconnectWithRetry() {
-        logger.info("Attempting to reconnect...");
-        connectWithRetry();
     }
 }
