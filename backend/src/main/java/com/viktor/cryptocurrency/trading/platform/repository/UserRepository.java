@@ -40,6 +40,6 @@ public class UserRepository {
     }
 
     public void updateBalance(User user, BigDecimal amount) {
-        jdbcService.executeUpdate(UserQueries.UPDATE_USER_BALANCE.getQuery(), user.getUserId(), amount);
+        jdbcService.executeUpdate(UserQueries.UPDATE_USER_BALANCE.getQuery(), amount, user.getUserId());
     }
 }
