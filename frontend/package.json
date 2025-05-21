@@ -15,5 +15,10 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"svelte": "^5.0.0",
 		"vite": "^6.2.6"
+	},
+	"dependencies": {
+		"@stomp/stompjs": "^7.1.1",
+		"sockjs-client": "^1.6.1",
+		"stompjs": "^2.3.3"
 	}
 }
