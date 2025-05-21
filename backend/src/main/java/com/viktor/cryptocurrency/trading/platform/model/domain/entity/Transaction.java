@@ -1,12 +1,13 @@
 package com.viktor.cryptocurrency.trading.platform.model.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -19,8 +20,9 @@ public class Transaction {
     private long cryptoId;
     private BigDecimal amount;
     private BigDecimal priceAtTransaction;
+    private BigDecimal profitLoss;
     private TransactionType transactionType;
-    private Timestamp transactionDate;
+    private String transactionDate;
 
     public Transaction(long userId, long cryptoId, BigDecimal amount, BigDecimal priceAtTransaction, TransactionType transactionType) {
         this.userId = userId;
@@ -28,6 +30,7 @@ public class Transaction {
         this.amount = amount;
         this.priceAtTransaction = priceAtTransaction;
         this.transactionType = transactionType;
+        transactionDate = LocalDateTime.now().toString();
     }
 
     public enum TransactionType {

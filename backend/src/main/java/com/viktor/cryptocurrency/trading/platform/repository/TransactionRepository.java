@@ -7,6 +7,7 @@ import com.viktor.cryptocurrency.trading.platform.repository.util.queries.Transa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -17,7 +18,7 @@ public class TransactionRepository {
     public void save(Transaction transaction) {
         jdbcService.executeUpdate(
                 TransactionQueries.SAVE_TRANSACTION.getQuery(),
-                transaction.getUserId(), transaction.getCryptoId(), transaction.getAmount(), transaction.getPriceAtTransaction(), transaction.getTransactionType().name()
+                transaction.getUserId(), transaction.getCryptoId(), transaction.getAmount(), transaction.getPriceAtTransaction(), transaction.getProfitLoss(), transaction.getTransactionType().name(), transaction.getTransactionDate()
         );
     }
 
@@ -27,6 +28,14 @@ public class TransactionRepository {
                 TransactionQueries::map,
                 user.getUserId()
         );
+    }
+
+    public BigDecimal findAverageBuyPriceByUserAndCryptoId(long userId, long cryptoId) {
+        return jdbcService.queryForObject(
+                TransactionQueries.FIND_AVERAGE_BUY_PRICE_BY_USER_AND_CRYPTO_ID.getQuery(),
+                TransactionQueries::mapAverageBuyPrice,
+                userId,
+                cryptoId);
     }
 
 }

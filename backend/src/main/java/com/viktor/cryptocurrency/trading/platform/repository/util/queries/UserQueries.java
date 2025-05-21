@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 @Getter
 public enum UserQueries {
-    GET_USER_BY_USERNAME(String.format("SELECT * FROM %s WHERE %s = ?", getTableName(), fields.USERNAME.name)),
+    FIND_USER_BY_USERNAME(String.format("SELECT * FROM %s WHERE %s = ?", getTableName(), fields.USERNAME.name)),
     SAVE_USER(String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", getTableName(), fields.USERNAME.name, fields.PASSWORD.name)),
     RESET_USER_BALANCE(String.format("UPDATE %s SET %s = 0 WHERE %s = ? ", getTableName(), fields.BALANCE.name, fields.ID.name)),
     UPDATE_USER_BALANCE(String.format("UPDATE %s SET %s = %s + ? WHERE %s = ? ", getTableName(), fields.BALANCE.name, fields.BALANCE.name, fields.ID.name));

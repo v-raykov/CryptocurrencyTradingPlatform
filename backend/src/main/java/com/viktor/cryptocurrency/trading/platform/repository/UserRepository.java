@@ -17,7 +17,7 @@ public class UserRepository {
     public User findUserByUsername(String username) {
         try {
             return jdbcService.queryForObject(
-                    UserQueries.GET_USER_BY_USERNAME.getQuery(),
+                    UserQueries.FIND_USER_BY_USERNAME.getQuery(),
                     UserQueries::map,
                     username
             );

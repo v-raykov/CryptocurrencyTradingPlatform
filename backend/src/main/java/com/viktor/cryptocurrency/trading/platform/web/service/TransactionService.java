@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -17,10 +18,22 @@ public class TransactionService {
 
     @EventListener(CryptoTransactionEvent.class)
     public void onTransaction(CryptoTransactionEvent event) {
-        transactionRepository.save(event.transaction());
+        Transaction transaction = event.transaction();
+        if (transaction.getTransactionType() == Transaction.TransactionType.SELL) {
+            transaction.setProfitLoss(getProfitLoss(transaction));
+        }
+        transactionRepository.save(transaction);
     }
 
     public List<Transaction> getTransactionsByUser(User user) {
         return transactionRepository.findByUser(user);
+    }
+
+    private BigDecimal getProfitLoss(Transaction transaction) {
+        return transactionRepository.findAverageBuyPriceByUserAndCryptoId(transaction.getUserId(), transaction.getCryptoId()
+                )
+                .subtract(
+                        transaction.getAmount().multiply(transaction.getPriceAtTransaction())
+                );
     }
 }

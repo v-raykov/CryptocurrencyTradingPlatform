@@ -15,14 +15,14 @@ public class CryptoRepository {
 
     public List<Crypto> getAll() {
         return jdbcService.queryForList(
-                CryptoQueries.GET_ALL_CRYPTOS.getQuery(),
+                CryptoQueries.FIND_ALL_CRYPTOS.getQuery(),
                 CryptoQueries::map
         );
     }
 
     public Crypto findCryptoById(Long id) {
         return jdbcService.queryForObject(
-                CryptoQueries.GET_CRYPTO_BY_ID.getQuery(),
+                CryptoQueries.FIND_CRYPTO_BY_ID.getQuery(),
                 CryptoQueries::map,
                 id
         );

@@ -39,17 +39,17 @@ CREATE TABLE Transaction
     user_id              BIGINT         NOT NULL,
     crypto_id            BIGINT         NOT NULL,
     amount               DECIMAL(20, 8) NOT NULL CHECK (amount > 0),
-    price_at_transaction DECIMAL(20, 8) CHECK (price_at_transaction > 0),
+    price_at_transaction DECIMAL(20, 8) NOT NULL CHECK (price_at_transaction > 0),
+    profit_loss          DECIMAL(20, 8) DEFAULT NULL,
     transaction_type     ENUM('BUY', 'SELL') NOT NULL,
-    transaction_date     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    transaction_date     DATETIME       NOT NULL,
     FOREIGN KEY (user_id) REFERENCES User (user_id),
     FOREIGN KEY (crypto_id) REFERENCES Crypto (crypto_id)
 );
 
 -- Triggers for automatic balance and portfolio updates
 
-DELIMITER
-//
+DELIMITER //
 
 -- Trigger to update bank_balance after a BUY transaction
 CREATE TRIGGER update_bank_balance_after_buy
@@ -134,6 +134,40 @@ BEGIN
 END IF;
 END IF;
 END
+//
+
+CREATE FUNCTION getTransactionCost(transactionId BIGINT)
+    RETURNS DECIMAL(20, 8)
+    DETERMINISTIC
+    READS SQL DATA
+BEGIN
+    DECLARE result DECIMAL(20, 8);
+
+SELECT amount * price_at_transaction
+INTO result
+FROM Transaction
+WHERE transaction_id = transactionId;
+
+RETURN result;
+END;
+//
+
+CREATE FUNCTION getAverageTransactionCost(userId BIGINT, cryptoId BIGINT)
+    RETURNS DECIMAL(20, 8)
+    DETERMINISTIC
+    READS SQL DATA
+BEGIN
+    DECLARE avg_cost DECIMAL(20, 8);
+
+SELECT AVG(amount * price_at_transaction)
+INTO avg_cost
+FROM Transaction
+WHERE user_id = userId
+  AND crypto_id = cryptoId
+  AND transaction_type = 'BUY';
+
+RETURN avg_cost;
+END;
 //
 
 DELIMITER ;

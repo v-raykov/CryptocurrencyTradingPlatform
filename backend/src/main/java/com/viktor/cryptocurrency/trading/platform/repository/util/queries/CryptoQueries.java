@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 @Getter
 public enum CryptoQueries {
-    GET_ALL_CRYPTOS(String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 20;", getTableName(), fields.ASK.name)),
+    FIND_ALL_CRYPTOS(String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 20;", getTableName(), fields.ASK.name)),
     SAVE_CRYPTO(buildUpsertQuery()),
-    GET_CRYPTO_BY_ID(String.format("SELECT * FROM %s WHERE %s = ?;", getTableName(), fields.ID.name));
+    FIND_CRYPTO_BY_ID(String.format("SELECT * FROM %s WHERE %s = ?;", getTableName(), fields.ID.name));
 
     private final String query;
 
