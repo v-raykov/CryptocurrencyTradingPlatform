@@ -14,14 +14,23 @@
             return;
         }
 
-        const response = await register(username, password);
+        try {
+            const response = await register(username, password);
 
-        if (response.status === 201) {
-            await goto('/core/login');
-        } else {
-            errorMessage = 'Registration failed. Please try again.';
+            if (response.status === 201) {
+                await goto('/core/login');
+            } else {
+                errorMessage = 'Registration failed. Please try again.';
+            }
+        } catch (err) {
+            if (err?.response?.status === 409) {
+                errorMessage = 'Username already exists.';
+            } else {
+                errorMessage = 'Registration failed. Please try again.';
+            }
         }
     }
+
 </script>
 
 <h1 style="text-align: center;">Register</h1>
