@@ -22,3 +22,11 @@ export async function login(username, password) {
 }
 
 export const getJWT = () => localStorage.getItem('jwt');
+
+export async function buyCrypto(cryptoId, amount) {
+    return await api.post(`/crypto/${cryptoId}/buy?amount=${amount}`, null,{
+        headers: {
+            Authorization: `Bearer ${getJWT()}`
+        }
+    });
+}
