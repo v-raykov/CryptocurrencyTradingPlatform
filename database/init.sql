@@ -4,7 +4,7 @@ CREATE TABLE User
     user_id  BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password CHAR(60)           NOT NULL,
-    balance  DECIMAL(20, 8) DEFAULT 1000.0 CHECK (balance >= 0)
+    balance  DECIMAL(20, 8) DEFAULT 10000.0 CHECK (balance >= 0)
 );
 
 -- Crypto Table
