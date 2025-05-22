@@ -38,11 +38,11 @@ public class CryptoController {
 
     @PostMapping("/{id}/buy")
     public void buyCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
-        cryptoService.buyCrypto(user, id, amount);
+        cryptoService.buyCrypto(user.getUserId(), id, amount);
     }
 
     @PostMapping("/{id}/sell")
     public void sellCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
-        cryptoService.sellCrypto(user, id, amount);
+        cryptoService.sellCrypto(user.getUserId(), id, amount);
     }
 }

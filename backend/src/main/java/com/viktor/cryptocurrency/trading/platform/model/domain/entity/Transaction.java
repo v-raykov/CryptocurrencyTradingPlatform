@@ -1,6 +1,5 @@
 package com.viktor.cryptocurrency.trading.platform.model.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

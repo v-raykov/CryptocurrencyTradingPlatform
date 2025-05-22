@@ -1,7 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.repository;
 
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Portfolio;
-import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.repository.util.JdbcService;
 import com.viktor.cryptocurrency.trading.platform.repository.util.queries.PortfolioQueries;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +13,15 @@ import java.util.List;
 public class PortfolioRepository {
     private final JdbcService jdbcService;
 
-    public List<Portfolio> findByUserId(User user) {
+    public List<Portfolio> findByUserId(long userId) {
         return jdbcService.queryForList(
                 PortfolioQueries.FIND_BY_USER.getQuery(),
                 PortfolioQueries::map,
-                user.getUserId()
+                userId
         );
     }
 
-    public Portfolio findPortfolioByUserIdAndSymbol(long userId, long cryptoId) {
+    public Portfolio findByUserAndCryptoId(long userId, long cryptoId) {
         return jdbcService.queryForObject(
                 PortfolioQueries.FIND_BY_USER_AND_CRYPTO_ID.getQuery(),
                 PortfolioQueries::map,

@@ -22,27 +22,27 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/transaction-history")
-    public List<Transaction> getTransactions(@AuthenticationPrincipal User user) {
-        return transactionService.getTransactionsByUser(user);
+    public List<Transaction> getUserTransactions(@AuthenticationPrincipal User user) {
+        return transactionService.getTransactionsByUserId(user.getUserId());
     }
 
     @GetMapping("/portfolio")
-    public List<Portfolio> getPortfolio(@AuthenticationPrincipal User user) {
-        return portfolioService.getPortfolioByUser(user);
+    public List<Portfolio> getUserPortfolio(@AuthenticationPrincipal User user) {
+        return portfolioService.getPortfolioByUserId(user.getUserId());
     }
 
     @GetMapping("/balance")
     public BigDecimal getUser(@AuthenticationPrincipal User user) {
-        return userService.getUserBalance(user);
+        return userService.getUserBalanceById(user.getUserId());
     }
 
     @PutMapping("/balance/reset")
-    public void resetBalance(@AuthenticationPrincipal User user) {
-        userService.resetUserBalance(user);
+    public void resetUserBalanceById(@AuthenticationPrincipal User user) {
+        userService.resetUserBalanceById(user.getUserId());
     }
 
     @PutMapping("/balance/update")
-    public void updateBalance(@AuthenticationPrincipal User user, @RequestParam BigDecimal amount) {
-        userService.updateBalance(user, amount);
+    public void updateUserBalanceById(@AuthenticationPrincipal User user, @RequestParam BigDecimal amount) {
+        userService.updateUserBalanceById(user.getUserId(), amount);
     }
 }

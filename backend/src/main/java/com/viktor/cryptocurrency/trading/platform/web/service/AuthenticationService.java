@@ -1,7 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.web.service;
 
 import com.viktor.cryptocurrency.trading.platform.config.security.jwt.JwtUtils;
-import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.model.server.request.AuthenticationRequest;
 import com.viktor.cryptocurrency.trading.platform.model.server.response.JwtTokenResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class AuthenticationService {
     private final JwtUtils jwtUtils;
 
     public void register(AuthenticationRequest request) {
-        userService.save(new User(request.username(), passwordEncoder.encode(request.password())));
+        userService.createUser(request.username(), passwordEncoder.encode(request.password()));
     }
 
     public JwtTokenResponse login(AuthenticationRequest details) {

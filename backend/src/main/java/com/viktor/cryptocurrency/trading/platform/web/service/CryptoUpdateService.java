@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CryptoUpdateService {
-
     private final CryptoService cryptoService;
     private final SimpMessagingTemplate messagingTemplate;
 

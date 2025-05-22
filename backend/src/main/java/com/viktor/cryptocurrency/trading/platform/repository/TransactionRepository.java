@@ -1,7 +1,6 @@
 package com.viktor.cryptocurrency.trading.platform.repository;
 
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Transaction;
-import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.repository.util.JdbcService;
 import com.viktor.cryptocurrency.trading.platform.repository.util.queries.TransactionQueries;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +21,11 @@ public class TransactionRepository {
         );
     }
 
-    public List<Transaction> findByUser(User user) {
+    public List<Transaction> findByUserId(long userId) {
         return jdbcService.queryForList(
                 TransactionQueries.FIND_BY_USER.getQuery(),
                 TransactionQueries::map,
-                user.getUserId()
+                userId
         );
     }
 

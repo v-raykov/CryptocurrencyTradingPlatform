@@ -1,12 +1,10 @@
 package com.viktor.cryptocurrency.trading.platform.web.service;
 
-import com.viktor.cryptocurrency.trading.platform.config.exception.InsufficientFundsException;
 import com.viktor.cryptocurrency.trading.platform.config.exception.InvalidAmountException;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Crypto;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Transaction;
-import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
-import com.viktor.cryptocurrency.trading.platform.model.domain.event.CryptoTransactionEvent;
-import com.viktor.cryptocurrency.trading.platform.model.domain.event.SellCryptoRequestedEvent;
+import com.viktor.cryptocurrency.trading.platform.model.domain.event.BuyTransactionRequestedEvent;
+import com.viktor.cryptocurrency.trading.platform.model.domain.event.SellTransactionRequestedEvent;
 import com.viktor.cryptocurrency.trading.platform.repository.CryptoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,31 +27,28 @@ public class CryptoService {
         return cryptoRepository.getAll();
     }
 
-    public Crypto getCryptoById(Long id) {
-        return cryptoRepository.findCryptoById(id);
+    public Crypto getCryptoById(long id) {
+        return cryptoRepository.findById(id);
     }
 
-    public void buyCrypto(User user, long id, BigDecimal amount) {
+    public void buyCrypto(long userId, long cryptoId, BigDecimal amount) {
         validateAmount(amount);
-        Crypto crypto = cryptoRepository.findCryptoById(id);
-        BigDecimal ask = BigDecimal.valueOf(crypto.getAsk());
-        BigDecimal totalCost = ask.multiply(amount);
-        validatePurchase(user.getBalance(), totalCost, amount);
-        publisher.publishEvent(new CryptoTransactionEvent(new Transaction(
-                user.getUserId(),
+        Crypto crypto = cryptoRepository.findById(cryptoId);
+        publisher.publishEvent(new BuyTransactionRequestedEvent(new Transaction(
+                userId,
                 crypto.getCryptoId(),
                 amount,
-                ask,
+                BigDecimal.valueOf(crypto.getAsk()),
                 Transaction.TransactionType.BUY
         )));
     }
 
-    public void sellCrypto(User user, long id, BigDecimal amount) {
+    public void sellCrypto(long userId, long cryptoId, BigDecimal amount) {
         validateAmount(amount);
-        Crypto crypto = cryptoRepository.findCryptoById(id);
+        Crypto crypto = cryptoRepository.findById(cryptoId);
         BigDecimal bid = BigDecimal.valueOf(crypto.getBid());
-        publisher.publishEvent(new SellCryptoRequestedEvent(new Transaction(
-                user.getUserId(),
+        publisher.publishEvent(new SellTransactionRequestedEvent(new Transaction(
+                userId,
                 crypto.getCryptoId(),
                 amount,
                 bid,
@@ -64,12 +59,6 @@ public class CryptoService {
     private void validateAmount(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new InvalidAmountException();
-        }
-    }
-
-    private void validatePurchase(BigDecimal balance, BigDecimal cost, BigDecimal amount) {
-        if (balance.compareTo(cost) < 0) {
-            throw new InsufficientFundsException(amount.toString());
         }
     }
 }

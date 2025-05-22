@@ -20,7 +20,7 @@ public class CryptoRepository {
         );
     }
 
-    public Crypto findCryptoById(Long id) {
+    public Crypto findById(Long id) {
         return jdbcService.queryForObject(
                 CryptoQueries.FIND_CRYPTO_BY_ID.getQuery(),
                 CryptoQueries::map,

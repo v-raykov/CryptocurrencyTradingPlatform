@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class UserRepository {
     private final JdbcService jdbcService;
 
-    public User findUserByUsername(String username) {
+    public User findByUsername(String username) {
         try {
             return jdbcService.queryForObject(
                     UserQueries.FIND_USER_BY_USERNAME.getQuery(),
@@ -24,7 +24,6 @@ public class UserRepository {
         } catch (Exception e) {
             throw new UsernameNotFoundException("%s not found".formatted(username));
         }
-
     }
 
     public void save(User user) {
@@ -35,11 +34,19 @@ public class UserRepository {
         );
     }
 
-    public void resetUserBalance(User user) {
-        jdbcService.executeUpdate(UserQueries.RESET_USER_BALANCE.getQuery(), user.getUserId());
+    public void resetUserBalanceById(long id) {
+        jdbcService.executeUpdate(UserQueries.RESET_USER_BALANCE_BY_ID.getQuery(), id);
     }
 
-    public void updateBalance(User user, BigDecimal amount) {
-        jdbcService.executeUpdate(UserQueries.UPDATE_USER_BALANCE.getQuery(), amount, user.getUserId());
+    public void updateUserBalanceById(long id, BigDecimal amount) {
+        jdbcService.executeUpdate(UserQueries.UPDATE_USER_BALANCE_BY_ID.getQuery(), amount, id);
+    }
+
+    public BigDecimal findUserBalanceById(long userId) {
+        return jdbcService.queryForObject(
+                UserQueries.FIND_USER_BALANCE_BY_ID.getQuery(),
+                UserQueries::mapBalance,
+                userId
+        );
     }
 }

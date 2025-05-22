@@ -20,7 +20,6 @@ public class JdbcService {
 
     public <T> List<T> queryForList(String sql, ResultSetMapper<T> mapper, Object... params) {
         List<T> results = new ArrayList<>();
-
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = prepareStatement(conn, sql, params);
              ResultSet rs = ps.executeQuery()) {
@@ -28,7 +27,6 @@ public class JdbcService {
             while (rs.next()) {
                 results.add(mapper.map(rs));
             }
-
         } catch (SQLException e) {
             logError(sql);
             throw new DatabaseException(e);
@@ -41,10 +39,8 @@ public class JdbcService {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = prepareStatement(conn, sql, params);
              ResultSet rs = ps.executeQuery()) {
-
             if (!rs.next()) throw new EntityNotFoundException();
             return mapper.map(rs);
-
         } catch (SQLException e) {
             logError(sql);
             throw new DatabaseException(e);
@@ -54,9 +50,7 @@ public class JdbcService {
     public void executeUpdate(String sql, Object... params) {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = prepareStatement(conn, sql, params)) {
-
             ps.executeUpdate();
-
         } catch (SQLException e) {
             logError(sql);
             throw new DatabaseException(e);
