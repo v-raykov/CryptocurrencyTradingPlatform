@@ -53,12 +53,13 @@ export async function fetchAllPortfolios() {
     });
 }
 
-export async function getBalance() {
-    return await api.get('/user/balance', {
+export async function fetchBalance() {
+    const res = await api.get('/user/balance', {
         headers: {
             Authorization: `Bearer ${getJWT()}`
         }
     });
+    return parseFloat(res.data);
 }
 
 export async function updateBalance(amount) {

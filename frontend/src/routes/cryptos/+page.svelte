@@ -9,16 +9,6 @@
     $: currentConnectionStatus = $connectionStatus;
     $: currentMessage = $message;
 
-    $: {
-        if (currentCryptos) {
-            currentCryptos.forEach(crypto => {
-                if (buyAmounts[crypto.symbol] === undefined) {
-                    buyAmounts[crypto.symbol] = 0;
-                }
-            });
-        }
-    }
-
     async function handleBuy(cryptoId, symbol) {
         const amount = buyAmounts[symbol];
         if (amount <= 0) {
