@@ -59,7 +59,7 @@ export async function fetchBalance() {
             Authorization: `Bearer ${getJWT()}`
         }
     });
-    return parseFloat(res.data);
+    return res.data.balance;
 }
 
 export async function updateBalance(amount) {

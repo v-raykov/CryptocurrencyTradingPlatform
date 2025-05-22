@@ -1,6 +1,6 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-    import { cryptos, connectionStatus, message, initializeCryptoFeed, deactivateCryptoFeed } from '../../stores/cryptoStore.js';
+    import { cryptos, connectionStatus, message, initializeCryptoFeed, deactivateCryptoFeed } from '$lib/stores/cryptoStore.js';
     import { fetchAllTransactions } from "$lib/api.js";
 
     let allTransactions = [];

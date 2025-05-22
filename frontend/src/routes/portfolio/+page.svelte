@@ -1,14 +1,21 @@
 <script>
-    import { onMount, onDestroy } from 'svelte';
-    import { cryptos, connectionStatus, message, initializeCryptoFeed, deactivateCryptoFeed } from '../../stores/cryptoStore.js';
-    import { sellCrypto, fetchAllPortfolios } from "$lib/api.js";
+    import {onMount, onDestroy} from 'svelte';
+    import {
+        cryptos,
+        connectionStatus,
+        message,
+        initializeCryptoFeed,
+        deactivateCryptoFeed
+    } from '$lib/stores/cryptoStore.js';
+    import {sellCrypto, fetchAllPortfolios, fetchBalance} from "$lib/api.js";
+    import {balance} from "$lib/stores/balanceStore.js";
 
     let portfolios = [];
 
     $: displayedCryptos = $cryptos.map(crypto => {
         const portfolioEntry = portfolios.find(p => p.cryptoId === crypto.cryptoId);
         if (portfolioEntry) {
-            return { ...crypto, ownedAmount: portfolioEntry.amount };
+            return {...crypto, ownedAmount: portfolioEntry.amount};
         }
         return null;
     }).filter(Boolean);
@@ -58,6 +65,7 @@
             message.set(`Successfully sold ${amount} of ${symbol}!`);
             sellAmounts[symbol] = 0;
             await fetchPortfolios();
+            balance.set(await fetchBalance());
         } catch (err) {
             console.error('Failed to send sell request:', err);
             if (err.response && err.response.data && err.response.data.message) {

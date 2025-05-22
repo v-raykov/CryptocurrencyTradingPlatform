@@ -1,7 +1,14 @@
 <script>
-    import { onMount, onDestroy } from 'svelte';
-    import { cryptos, connectionStatus, message, initializeCryptoFeed, deactivateCryptoFeed } from '../../stores/cryptoStore.js';
-    import { buyCrypto } from "$lib/api.js";
+    import {onMount, onDestroy} from 'svelte';
+    import {
+        cryptos,
+        connectionStatus,
+        message,
+        initializeCryptoFeed,
+        deactivateCryptoFeed
+    } from '$lib/stores/cryptoStore.js';
+    import {buyCrypto, fetchBalance} from "$lib/api.js";
+    import {balance} from "$lib/stores/balanceStore.js";
 
     let buyAmounts = {};
 
@@ -20,6 +27,7 @@
 
         try {
             await buyCrypto(cryptoId, amount);
+            balance.set(await fetchBalance());
             message.set(`Successfully bought ${amount} of ${symbol}!`);
             buyAmounts[symbol] = 0;
         } catch (err) {
@@ -65,36 +73,39 @@
         <th>Volume</th>
         <th>Low</th>
         <th>High</th>
-        <th>Actions</th> </tr>
+        <th>Actions</th>
+    </tr>
     </thead>
     <tbody>
-    {#each $cryptos as crypto (crypto.symbol)} <tr>
-        <td>{crypto.symbol}</td>
-        <td>{crypto.bid}</td>
-        <td>{crypto.ask}</td>
-        <td>{crypto.last}</td>
-        <td>{crypto.volume}</td>
-        <td>{crypto.low}</td>
-        <td>{crypto.high}</td>
-        <td>
-            <div>
-                <input
-                        type="number"
-                        min="0"
-                        step="any"
-                        placeholder="Amount"
-                        bind:value={buyAmounts[crypto.symbol]}
-                        on:input={() => {
+    {#each $cryptos as crypto (crypto.symbol)}
+        <tr>
+            <td>{crypto.symbol}</td>
+            <td>{crypto.bid}</td>
+            <td>{crypto.ask}</td>
+            <td>{crypto.last}</td>
+            <td>{crypto.volume}</td>
+            <td>{crypto.low}</td>
+            <td>{crypto.high}</td>
+            <td>
+                <div>
+                    <input
+                            type="number"
+                            min="0"
+                            step="any"
+                            placeholder="Amount"
+                            bind:value={buyAmounts[crypto.symbol]}
+                            on:input={() => {
                             buyAmounts[crypto.symbol] = parseFloat(buyAmounts[crypto.symbol]) || 0;
                         }}
-                />
-                <button on:click={() => handleBuy(crypto.cryptoId, crypto.symbol)}>Buy</button>
-            </div>
-        </td>
-    </tr>
+                    />
+                    <button on:click={() => handleBuy(crypto.cryptoId, crypto.symbol)}>Buy</button>
+                </div>
+            </td>
+        </tr>
     {:else}
         <tr>
-            <td colspan="8">No crypto data available</td> </tr>
+            <td colspan="8">No crypto data available</td>
+        </tr>
     {/each}
     </tbody>
 </table>

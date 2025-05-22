@@ -2,10 +2,10 @@
     import '../app.css';
     import {fetchBalance, updateBalance, resetBalance, logout} from '$lib/api.js';
     import {onMount} from "svelte";
+    import {balance} from '$lib/stores/balanceStore.js';
 
-    let balance = 0;
     onMount(async () => {
-        balance = await fetchBalance();
+        balance.set(await fetchBalance());
     });
 
     async function handleUpdate() {
@@ -15,7 +15,7 @@
         const amount = parseFloat(input);
         if (!isNaN(amount)) {
             await updateBalance(amount)
-            balance = await fetchBalance();
+            balance.set(await fetchBalance());
         } else {
             alert("Invalid number.");
         }
@@ -23,7 +23,8 @@
 
     async function handleReset() {
         if (confirm("Are you sure you want to reset your balance?")) {
-            balance = await resetBalance();
+            await resetBalance();
+            balance.set(await fetchBalance());
         }
     }
 
@@ -35,7 +36,7 @@
 <header>
     <span>Cryptocurrency Trading Platform</span>
     <div class="user-controls">
-        <span>Balance: {balance}</span>
+        <span>Balance: {$balance.toFixed(2)}</span>
         <button on:click={handleUpdate}>Update</button>
         <button on:click={handleReset}>Reset</button>
         <button on:click={handleLogout}>Logout</button>
