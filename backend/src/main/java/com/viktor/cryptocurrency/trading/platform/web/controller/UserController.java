@@ -3,6 +3,7 @@ package com.viktor.cryptocurrency.trading.platform.web.controller;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Portfolio;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Transaction;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
+import com.viktor.cryptocurrency.trading.platform.model.server.response.UserBalanceResponse;
 import com.viktor.cryptocurrency.trading.platform.web.service.PortfolioService;
 import com.viktor.cryptocurrency.trading.platform.web.service.TransactionService;
 import com.viktor.cryptocurrency.trading.platform.web.service.UserService;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/balance")
-    public BigDecimal getUser(@AuthenticationPrincipal User user) {
+    public UserBalanceResponse getUser(@AuthenticationPrincipal User user) {
         return userService.getUserBalanceById(user.getUserId());
     }
 

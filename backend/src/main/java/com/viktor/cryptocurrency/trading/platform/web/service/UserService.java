@@ -5,6 +5,7 @@ import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Transactio
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.model.domain.event.BuyTransactionRequestedEvent;
 import com.viktor.cryptocurrency.trading.platform.model.domain.event.TransactionApprovedEvent;
+import com.viktor.cryptocurrency.trading.platform.model.server.response.UserBalanceResponse;
 import com.viktor.cryptocurrency.trading.platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,8 +31,8 @@ public class UserService implements UserDetailsService {
         userRepository.save(new User(username, encodedPassword));
     }
 
-    public BigDecimal getUserBalanceById(long id) {
-        return userRepository.findUserBalanceById(id);
+    public UserBalanceResponse getUserBalanceById(long id) {
+        return new UserBalanceResponse(userRepository.findUserBalanceById(id));
     }
 
     public void resetUserBalanceById(long id) {
