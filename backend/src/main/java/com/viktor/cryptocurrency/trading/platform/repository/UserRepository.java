@@ -1,5 +1,7 @@
 package com.viktor.cryptocurrency.trading.platform.repository;
 
+import com.viktor.cryptocurrency.trading.platform.config.exception.DatabaseException;
+import com.viktor.cryptocurrency.trading.platform.config.exception.UserAlreadyExistsException;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.repository.util.*;
 import com.viktor.cryptocurrency.trading.platform.repository.util.queries.UserQueries;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,11 +30,17 @@ public class UserRepository {
     }
 
     public void save(User user) {
-        jdbcService.executeUpdate(
-                UserQueries.SAVE_USER.getQuery(),
-                user.getUsername(),
-                user.getPassword()
-        );
+        try {
+            jdbcService.executeUpdate(
+                    UserQueries.SAVE_USER.getQuery(),
+                    user.getUsername(),
+                    user.getPassword()
+            );
+        } catch (DatabaseException e) {
+            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
+                throw new UserAlreadyExistsException(user.getUsername());
+            }
+        }
     }
 
     public void resetUserBalanceById(long id) {
