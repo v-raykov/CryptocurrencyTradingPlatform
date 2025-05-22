@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {goto} from "$app/navigation";
 
 const isServer = typeof window === 'undefined';
 
@@ -21,6 +22,11 @@ export async function login(username, password) {
     return await api.post('/login', {username, password});
 }
 
+export async function logout() {
+    localStorage.removeItem('token');
+    await goto('/login');
+}
+
 export const getJWT = () => localStorage.getItem('jwt');
 
 export async function buyCrypto(cryptoId, amount) {
@@ -29,4 +35,52 @@ export async function buyCrypto(cryptoId, amount) {
             Authorization: `Bearer ${getJWT()}`
         }
     });
+}
+
+export async function sellCrypto(cryptoId, amount) {
+    return await api.post(`/crypto/${cryptoId}/sell?amount=${amount}`, null,{
+        headers: {
+            Authorization: `Bearer ${getJWT()}`
+        }
+    });
+}
+
+export async function fetchAllPortfolios() {
+    return await api.get('/user/portfolio', {
+        headers: {
+            Authorization: `Bearer ${getJWT()}`
+        }
+    });
+}
+
+export async function getBalance() {
+    return await api.get('/user/balance', {
+        headers: {
+            Authorization: `Bearer ${getJWT()}`
+        }
+    });
+}
+
+export async function updateBalance(amount) {
+    return await api.put(`/user/balance/update?amount=${amount}`, null, {
+        headers: {
+            Authorization: `Bearer ${getJWT()}`
+        }
+    });
+}
+
+export async function resetBalance() {
+    return await api.put('/user/balance/reset', null,{
+        headers: {
+            Authorization: `Bearer ${getJWT()}`
+        }
+    })
+}
+
+export async function fetchAllTransactions() {
+    return await api.get('/user/transaction-history', {
+        headers: {
+            Authorization: `Bearer ${getJWT()}`
+        }
+    })
 }

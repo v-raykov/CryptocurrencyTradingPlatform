@@ -1,5 +1,6 @@
 import { Client } from '@stomp/stompjs';
-import { getJWT } from '$lib/api';
+import { getJWT } from '$lib/api.js';
+import {goto} from "$app/navigation";
 
 export const createStompClient = ({
                                       onConnect,
@@ -10,7 +11,7 @@ export const createStompClient = ({
                                   }) => {
     const token = getJWT();
     if (!token) {
-        window.location.href = '/login';
+        goto('/login').then(r => {});
         return null;
     }
 
