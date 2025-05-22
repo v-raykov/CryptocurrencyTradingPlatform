@@ -1,6 +1,7 @@
 <script>
     import {goto} from '$app/navigation';
     import {register} from "$lib/api.js";
+    import '../app.css';
 
     let username = '';
     let password = '';
@@ -16,30 +17,32 @@
         const response = await register(username, password);
 
         if (response.status === 201) {
-            await goto('/login');
+            await goto('/core/login');
         } else {
             errorMessage = 'Registration failed. Please try again.';
         }
     }
 </script>
 
-<h1>Register</h1>
+<h1 style="text-align: center;">Register</h1>
 
-<form on:submit|preventDefault={handleRegister}>
-    <label for="username">Username</label>
-    <input type="text" id="username" bind:value={username} required/>
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; flex-direction: column;">
+    <form on:submit|preventDefault={handleRegister} style="display: flex; flex-direction: column; gap: 10px; width: 300px;">
+        <label for="username">Username</label>
+        <input type="text" id="username" bind:value={username} required/>
 
-    <label for="password">Password</label>
-    <input type="password" id="password" bind:value={password} required/>
+        <label for="password">Password</label>
+        <input type="password" id="password" bind:value={password} required/>
 
-    <label for="confirmPassword">Confirm Password</label>
-    <input type="password" id="confirmPassword" bind:value={confirmPassword} required/>
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" bind:value={confirmPassword} required/>
 
-    <button type="submit">Register</button>
-</form>
+        <button type="submit">Register</button>
+    </form>
 
-{#if errorMessage}
-    <p class="error">{errorMessage}</p>
-{/if}
+    {#if errorMessage}
+        <p class="error">{errorMessage}</p>
+    {/if}
 
-<p>Already have an account? <a href="/login">Login here</a></p>
+    <p style="margin-top: 1rem;">Already have an account? <a href="/login">Login here</a></p>
+</div>

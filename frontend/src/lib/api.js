@@ -23,7 +23,7 @@ export async function login(username, password) {
 }
 
 export async function logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwt');
     await goto('/login');
 }
 

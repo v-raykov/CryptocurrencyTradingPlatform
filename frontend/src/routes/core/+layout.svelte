@@ -45,9 +45,9 @@
 
 <div class="container">
     <nav class="sidebar">
-        <a href="/cryptos" class="nav-item">Cryptocurrency market</a>
-        <a href="/portfolio" class="nav-item">Portfolio</a>
-        <a href="/transactions-history" class="nav-item">Transactions History</a>
+        <a href="/core/cryptos" class="nav-item">Cryptocurrency market</a>
+        <a href="/core/portfolio" class="nav-item">Portfolio</a>
+        <a href="/core/transactions-history" class="nav-item">Transactions History</a>
     </nav>
 
     <main class="main">
