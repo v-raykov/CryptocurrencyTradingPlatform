@@ -1,27 +1,18 @@
 <script>
-    import { goto } from '$app/navigation';
+    import {goto} from '$app/navigation';
+    import {login} from "$lib/api.js";
 
     let username = '';
     let password = '';
     let errorMessage = '';
 
     async function handleLogin() {
-        const response = await fetch('http://localhost:8080/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const token = data.token;
-            localStorage.setItem('jwt', token);
+        const response = await login(username, password);
+        if (response.status === 200) {
+            localStorage.setItem('jwt', response.data.token);
             await goto('/cryptos');
         } else {
-            const error = await response.json();
-            errorMessage = error.message || 'Login failed. Please try again.';
+            errorMessage = 'Login failed. Please try again.';
         }
     }
 </script>
@@ -30,10 +21,10 @@
 
 <form on:submit|preventDefault={handleLogin}>
     <label for="username">Username</label>
-    <input type="text" id="username" bind:value={username} required />
+    <input type="text" id="username" bind:value={username} required/>
 
     <label for="password">Password</label>
-    <input type="password" id="password" bind:value={password} required />
+    <input type="password" id="password" bind:value={password} required/>
 
     <button type="submit">Login</button>
 </form>

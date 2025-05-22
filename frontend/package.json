@@ -11,6 +11,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^6.0.0",
+		"@sveltejs/adapter-node": "^5.2.12",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"svelte": "^5.0.0",
@@ -18,6 +19,8 @@
 	},
 	"dependencies": {
 		"@stomp/stompjs": "^7.1.1",
+		"@types/node": "^22.15.21",
+		"axios": "^1.9.0",
 		"sockjs-client": "^1.6.1",
 		"stompjs": "^2.3.3"
 	}

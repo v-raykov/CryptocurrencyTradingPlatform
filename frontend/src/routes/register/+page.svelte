@@ -1,5 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
+    import {register} from "$lib/api.js";
 
     let username = '';
     let password = '';
@@ -12,20 +13,12 @@
             return;
         }
 
-        const response = await fetch('http://localhost:8080/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        });
+        const response = await register(username, password);
 
-        if (response.ok) {
-            const data = await response.json();
+        if (response.status === 201) {
             await goto('/login');
         } else {
-            const error = await response.json();
-            errorMessage = error.message || 'Registration failed. Please try again.';
+            errorMessage = 'Registration failed. Please try again.';
         }
     }
 </script>

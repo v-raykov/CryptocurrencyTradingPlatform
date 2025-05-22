@@ -1,65 +1,48 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-    import { Client } from '@stomp/stompjs';
+    import { createStompClient } from './stompClient.js';
 
     let cryptos = [];
     let connectionStatus = 'Disconnected';
     let errorMessage = '';
-    let stompClient = null;
+    let stompClient;
+
+    function setStatus(status) {
+        connectionStatus = status;
+    }
+
+    async function handleConnect(frame, client) {
+        try {
+            client.subscribe('/topic/cryptos', (message) => {
+                cryptos = JSON.parse(message.body);
+            });
+
+            client.publish({
+                destination: '/app/crypto',
+                body: JSON.stringify({})
+            });
+
+        } catch (err) {
+            console.error(err);
+            errorMessage = 'Failed to fetch initial crypto data';
+        }
+    }
 
     onMount(() => {
-        const token = localStorage.getItem('jwt');
-        if (!token) {
-            window.location.href = '/login';
-            return;
-        }
-
-        stompClient = new Client({
-            brokerURL: 'ws://localhost:8080/ws',
-            connectHeaders: {
-                Authorization: `Bearer ${token}`
-            },
-            debug: (str) => {
-                console.log('STOMP:', str);
-                connectionStatus = str.includes('ERROR') ? 'Error' : str;
-            },
-            reconnectDelay: 5000,
-            heartbeatIncoming: 4000,
-            heartbeatOutgoing: 4000,
-            onConnect: (frame) => {
-                console.log('Connected:', frame);
-                connectionStatus = 'Connected';
-
-                // Subscribe to updates
-                stompClient.subscribe('/topic/cryptos', (message) => {
-                    console.log('Received:', message.body);
-                    cryptos = JSON.parse(message.body);
-                    cryptos = [...cryptos];
-                });
-
-                // Request initial data
-                stompClient.publish({
-                    destination: '/app/crypto',
-                    body: JSON.stringify({})
-                });
-            },
-            onDisconnect: (frame) => {
-                console.log('Disconnected:', frame);
-                connectionStatus = 'Disconnected';
-            },
-            onStompError: (frame) => {
-                console.error('STOMP Error:', frame);
-                errorMessage = frame.headers?.message || 'STOMP protocol error';
+        stompClient = createStompClient({
+            onConnect: handleConnect,
+            onError: (frame) => {
+                errorMessage = frame.headers?.message || 'STOMP error';
                 connectionStatus = 'Error';
             },
-            onWebSocketError: (event) => {
-                console.error('WebSocket Error:', event);
+            onWebSocketError: () => {
                 errorMessage = 'WebSocket connection failed';
                 connectionStatus = 'WS Error';
-            }
+            },
+            setStatus
         });
 
-        stompClient.activate();
+        stompClient?.activate();
 
         return () => {
             if (stompClient?.active) {
@@ -78,10 +61,12 @@
 <h1>Cryptos</h1>
 
 <div class="status">
-    Connection: <span class:connected={connectionStatus === 'Connected'}
-                      class:error={connectionStatus.includes('Error')}>
-    {connectionStatus}
-  </span>
+    Connection:
+    <span class:connected={connectionStatus === 'Connected'}
+          class:error={connectionStatus.includes('Error')}>
+        {connectionStatus}
+    </span>
+
     {#if errorMessage}
         <div class="error-message">{errorMessage}</div>
     {/if}
