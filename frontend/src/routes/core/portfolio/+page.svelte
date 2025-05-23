@@ -94,6 +94,7 @@
     <table>
         <thead>
         <tr>
+            <th>Name</th>
             <th>Symbol</th>
             <th>Last</th>
             <th>High</th>
@@ -105,6 +106,7 @@
         <tbody>
         {#each displayedCryptos as crypto (crypto.symbol)}
             <tr>
+                <td>{crypto.name}</td>
                 <td>{crypto.symbol}</td>
                 <td>{crypto.last}</td>
                 <td>{crypto.high}</td>

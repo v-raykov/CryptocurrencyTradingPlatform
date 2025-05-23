@@ -59,6 +59,7 @@
 <table>
     <thead>
     <tr>
+        <th>Name</th>
         <th>Symbol</th>
         <th>Bid</th>
         <th>Ask</th>
@@ -72,6 +73,7 @@
     <tbody>
     {#each $cryptos as crypto (crypto.symbol)}
         <tr>
+            <td>{crypto.name}</td>
             <td>{crypto.symbol}</td>
             <td>{crypto.bid}</td>
             <td>{crypto.ask}</td>

@@ -9,11 +9,13 @@
     let currentView = 'buy';
 
     $: currentMessage = $message;
-
-    $: cryptoSymbolMap = $cryptos.reduce((map, crypto) => {
-        map[crypto.cryptoId] = crypto.symbol;
-        return map;
-    }, {});
+    let cryptoSymbolMap = {};
+    $: if (Array.isArray($cryptos)) {
+        cryptoSymbolMap = $cryptos.reduce((map, crypto) => {
+            map[crypto.cryptoId] = crypto.symbol;
+            return map;
+        }, {});
+    }
 
     async function fetchTransactions() {
         try {
