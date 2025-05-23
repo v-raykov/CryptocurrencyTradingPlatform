@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void resetUserById(long id) {
-        userRepository.resetUserBalanceById(id);
+        userRepository.resetUserById(id);
     }
 
     public void updateUserBalanceById(long id, BigDecimal amount) {

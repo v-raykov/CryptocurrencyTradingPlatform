@@ -43,8 +43,8 @@ public class UserRepository {
         }
     }
 
-    public void resetUserBalanceById(long id) {
-        jdbcService.executeUpdate(UserQueries.RESET_USER_BALANCE_BY_ID.getQuery(), id);
+    public void resetUserById(long id) {
+        jdbcService.executeUpdate(UserQueries.RESET_USER_BY_ID.getQuery(), id);
     }
 
     public void updateUserBalanceById(long id, BigDecimal amount) {

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public enum UserQueries {
     FIND_USER_BY_USERNAME(String.format("SELECT * FROM %s WHERE %s = ?", getTableName(), fields.USERNAME.name)),
     SAVE_USER(String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", getTableName(), fields.USERNAME.name, fields.PASSWORD.name)),
-    RESET_USER_BALANCE_BY_ID(String.format("UPDATE %s SET %s = DEFAULT WHERE %s = ? ", getTableName(), fields.BALANCE.name, fields.ID.name)),
+    RESET_USER_BY_ID("CALL reset_user(?)"),
     UPDATE_USER_BALANCE_BY_ID(String.format("UPDATE %s SET %s = %s + ? WHERE %s = ? ", getTableName(), fields.BALANCE.name, fields.BALANCE.name, fields.ID.name)),
     FIND_USER_BALANCE_BY_ID(String.format("SELECT %s FROM %s WHERE %s = ?", fields.BALANCE.name, getTableName(), fields.ID.name));
 

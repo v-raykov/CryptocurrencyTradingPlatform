@@ -136,7 +136,19 @@ END IF;
 END
 //
 
-CREATE FUNCTION getTransactionCost(transactionId BIGINT)
+CREATE PROCEDURE reset_user_data(IN p_user_id BIGINT)
+BEGIN
+START TRANSACTION;
+
+DELETE FROM Portfolio WHERE user_id = p_user_id;
+DELETE FROM Transaction WHERE user_id = p_user_id;
+UPDATE User SET balance = 10000.0 WHERE user_id = p_user_id;
+
+COMMIT;
+END
+//
+
+CREATE FUNCTION get_transaction_cost(transaction_id BIGINT)
     RETURNS DECIMAL(20, 8)
     DETERMINISTIC
     READS SQL DATA
@@ -146,13 +158,13 @@ BEGIN
 SELECT amount * price_at_transaction
 INTO result
 FROM Transaction
-WHERE transaction_id = transactionId;
+WHERE transaction_id = transaction_id;
 
 RETURN result;
-END;
+END
 //
 
-CREATE FUNCTION getAverageTransactionCost(userId BIGINT, cryptoId BIGINT)
+CREATE FUNCTION get_average_transaction_cost(user_id BIGINT, crypto_id BIGINT)
     RETURNS DECIMAL(20, 8)
     DETERMINISTIC
     READS SQL DATA
@@ -162,12 +174,24 @@ BEGIN
 SELECT AVG(amount * price_at_transaction)
 INTO avg_cost
 FROM Transaction
-WHERE user_id = userId
-  AND crypto_id = cryptoId
+WHERE user_id = user_id
+  AND crypto_id = crypto_id
   AND transaction_type = 'BUY';
 
 RETURN avg_cost;
-END;
+END
+//
+
+CREATE PROCEDURE reset_user(IN p_user_id BIGINT)
+BEGIN
+START TRANSACTION;
+
+DELETE FROM Portfolio WHERE user_id = p_user_id;
+DELETE FROM Transaction WHERE user_id = p_user_id;
+UPDATE User SET balance = 10000.0 WHERE user_id = p_user_id;
+
+COMMIT;
+END
 //
 
 DELIMITER ;

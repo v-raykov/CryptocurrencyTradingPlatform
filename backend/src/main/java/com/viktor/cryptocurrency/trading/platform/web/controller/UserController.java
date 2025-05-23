@@ -38,15 +38,15 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserBalanceById(user.getUserId()));
     }
 
-    @PutMapping("/reset")
-    public ResponseEntity<Void> resetUser(@AuthenticationPrincipal User user) {
-        userService.resetUserById(user.getUserId());
-        return ResponseEntity.noContent().build();
-    }
-
     @PutMapping("/balance/update")
     public ResponseEntity<Void> updateUserBalance(@AuthenticationPrincipal User user, @RequestParam BigDecimal amount) {
         userService.updateUserBalanceById(user.getUserId(), amount);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<Void> resetUser(@AuthenticationPrincipal User user) {
+        userService.resetUserById(user.getUserId());
         return ResponseEntity.noContent().build();
     }
 }

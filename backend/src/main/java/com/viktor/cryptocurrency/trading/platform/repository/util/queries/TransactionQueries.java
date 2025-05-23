@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public enum TransactionQueries {
     SAVE_TRANSACTION(String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?, ?, ?);", getTableName(), fields.USER_ID.name, fields.CRYPTO_ID.name, fields.AMOUNT.name, fields.PRICE_AT_TRANSACTION.name, fields.PROFIT_LOSS.name, fields.TRANSACTION_TYPE.name, fields.TRANSACTION_DATE)),
     FIND_BY_USER(String.format("SELECT * FROM %s WHERE %s = ? ORDER BY %s DESC", getTableName(), fields.USER_ID.name, fields.TRANSACTION_DATE.name)),
-    FIND_AVERAGE_BUY_PRICE_BY_USER_AND_CRYPTO_ID("SELECT getAverageTransactionCost(?, ?) AS average_buy_price");
+    FIND_AVERAGE_BUY_PRICE_BY_USER_AND_CRYPTO_ID("SELECT get_average_transaction_cost(?, ?) AS average_buy_price");
 
     private enum fields {
         TRANSACTION_ID("transaction_id"),
