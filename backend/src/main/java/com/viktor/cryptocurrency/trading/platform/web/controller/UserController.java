@@ -8,6 +8,7 @@ import com.viktor.cryptocurrency.trading.platform.web.service.PortfolioService;
 import com.viktor.cryptocurrency.trading.platform.web.service.TransactionService;
 import com.viktor.cryptocurrency.trading.platform.web.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,27 +24,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/transaction-history")
-    public List<Transaction> getUserTransactions(@AuthenticationPrincipal User user) {
-        return transactionService.getTransactionsByUserId(user.getUserId());
+    public ResponseEntity<List<Transaction>> getUserTransactions(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(transactionService.getTransactionsByUserId(user.getUserId()));
     }
 
     @GetMapping("/portfolio")
-    public List<Portfolio> getUserPortfolio(@AuthenticationPrincipal User user) {
-        return portfolioService.getPortfolioByUserId(user.getUserId());
+    public ResponseEntity<List<Portfolio>> getUserPortfolio(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(portfolioService.getPortfolioByUserId(user.getUserId()));
     }
 
     @GetMapping("/balance")
-    public UserBalanceResponse getUser(@AuthenticationPrincipal User user) {
-        return userService.getUserBalanceById(user.getUserId());
+    public ResponseEntity<UserBalanceResponse> getUserBalance(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.getUserBalanceById(user.getUserId()));
     }
 
-    @PutMapping("/balance/reset")
-    public void resetUserBalanceById(@AuthenticationPrincipal User user) {
-        userService.resetUserBalanceById(user.getUserId());
+    @PutMapping("/reset")
+    public ResponseEntity<Void> resetUser(@AuthenticationPrincipal User user) {
+        userService.resetUserById(user.getUserId());
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/balance/update")
-    public void updateUserBalanceById(@AuthenticationPrincipal User user, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Void> updateUserBalance(@AuthenticationPrincipal User user, @RequestParam BigDecimal amount) {
         userService.updateUserBalanceById(user.getUserId(), amount);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
         return new UserBalanceResponse(userRepository.findUserBalanceById(id));
     }
 
-    public void resetUserBalanceById(long id) {
+    public void resetUserById(long id) {
         userRepository.resetUserBalanceById(id);
     }
 

@@ -4,6 +4,8 @@ import com.viktor.cryptocurrency.trading.platform.model.domain.entity.Crypto;
 import com.viktor.cryptocurrency.trading.platform.model.domain.entity.User;
 import com.viktor.cryptocurrency.trading.platform.web.service.CryptoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,28 +23,30 @@ public class CryptoController {
     // WebSocket endpoint
     @MessageMapping("/crypto")
     @SendTo("/topic/cryptos")
-    public List<Crypto> fetchAllCryptosViaWebSocket() {
-        return cryptoService.getAllCryptos();
+    public ResponseEntity<List<Crypto>> fetchAllCryptosViaWebSocket() {
+        return ResponseEntity.ok(cryptoService.getAllCryptos());
     }
 
     // REST endpoint
     @GetMapping
-    public List<Crypto> fetchAllCryptosViaRest() {
-        return cryptoService.getAllCryptos();
+    public ResponseEntity<List<Crypto>> fetchAllCryptosViaRest() {
+        return ResponseEntity.ok(cryptoService.getAllCryptos());
     }
 
     @GetMapping("/{id}")
-    public Crypto getCryptoById(@PathVariable long id) {
-        return cryptoService.getCryptoById(id);
+    public ResponseEntity<Crypto> getCryptoById(@PathVariable long id) {
+        return ResponseEntity.ok(cryptoService.getCryptoById(id));
     }
 
     @PostMapping("/{id}/buy")
-    public void buyCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Void> buyCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
         cryptoService.buyCrypto(user.getUserId(), id, amount);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/{id}/sell")
-    public void sellCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Void> sellCrypto(@AuthenticationPrincipal User user, @PathVariable long id, @RequestParam BigDecimal amount) {
         cryptoService.sellCrypto(user.getUserId(), id, amount);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
