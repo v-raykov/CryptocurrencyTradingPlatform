@@ -1,6 +1,6 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-    import { cryptos, connectionStatus, message, initializeCryptoFeed, deactivateCryptoFeed } from '$lib/stores/cryptoStore.js';
+    import { cryptos, message, initializeCryptoFeed, deactivateCryptoFeed } from '$lib/stores/cryptoStore.js';
     import { fetchAllTransactions } from "$lib/api.js";
 
     let allTransactions = [];
@@ -8,7 +8,6 @@
     let sellTransactions = [];
     let currentView = 'buy';
 
-    $: currentConnectionStatus = $connectionStatus;
     $: currentMessage = $message;
 
     $: cryptoSymbolMap = $cryptos.reduce((map, crypto) => {
@@ -48,11 +47,6 @@
 <h1>Transaction History</h1>
 
 <div>
-    Connection:
-    <span>
-        {$connectionStatus}
-    </span>
-
     {#if $message}
         <div>{$message}</div>
     {/if}

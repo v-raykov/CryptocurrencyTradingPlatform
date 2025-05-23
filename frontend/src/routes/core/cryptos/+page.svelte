@@ -2,7 +2,6 @@
     import {onMount, onDestroy} from 'svelte';
     import {
         cryptos,
-        connectionStatus,
         message,
         initializeCryptoFeed,
         deactivateCryptoFeed
@@ -13,7 +12,6 @@
     let buyAmounts = {};
 
     $: currentCryptos = $cryptos;
-    $: currentConnectionStatus = $connectionStatus;
     $: currentMessage = $message;
 
     async function handleBuy(cryptoId, symbol) {
@@ -53,11 +51,6 @@
 <h1>Cryptos</h1>
 
 <div>
-    Connection:
-    <span>
-        {$connectionStatus}
-    </span>
-
     {#if $message}
         <div>{$message}</div>
     {/if}
@@ -104,7 +97,7 @@
         </tr>
     {:else}
         <tr>
-            <td colspan="8">No crypto data available</td>
+            <td colspan="8">Loading crypto data...</td>
         </tr>
     {/each}
     </tbody>

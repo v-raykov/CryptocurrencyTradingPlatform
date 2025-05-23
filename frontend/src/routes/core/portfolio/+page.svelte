@@ -2,7 +2,6 @@
     import {onMount, onDestroy} from 'svelte';
     import {
         cryptos,
-        connectionStatus,
         message,
         initializeCryptoFeed,
         deactivateCryptoFeed
@@ -12,27 +11,22 @@
 
     let portfolios = [];
 
-    $: displayedCryptos = $cryptos.map(crypto => {
-        const portfolioEntry = portfolios.find(p => p.cryptoId === crypto.cryptoId);
-        if (portfolioEntry) {
-            return {...crypto, ownedAmount: portfolioEntry.amount};
-        }
-        return null;
-    }).filter(Boolean);
+    let displayedCryptos = [];
+    $: if (Array.isArray($cryptos)) {
+        displayedCryptos = $cryptos.map(crypto => {
+            const portfolioEntry = portfolios.find(p => p.cryptoId === crypto.cryptoId);
+            if (portfolioEntry) {
+                return {...crypto, ownedAmount: portfolioEntry.amount};
+            }
+            return null;
+        }).filter(Boolean);
+    } else {
+        displayedCryptos = [];
+    }
 
-    $: currentConnectionStatus = $connectionStatus;
     $: currentMessage = $message;
 
     let sellAmounts = {};
-    $: {
-        if (displayedCryptos) {
-            displayedCryptos.forEach(crypto => {
-                if (sellAmounts[crypto.symbol] === undefined) {
-                    sellAmounts[crypto.symbol] = 0;
-                }
-            });
-        }
-    }
 
     async function fetchPortfolios() {
         try {
@@ -91,11 +85,6 @@
 <h1>Portfolio</h1>
 
 <div>
-    Connection:
-    <span>
-        {$connectionStatus}
-    </span>
-
     {#if $message}
         <div>{$message}</div>
     {/if}
@@ -141,5 +130,5 @@
         </tbody>
     </table>
 {:else}
-    <p>No crypto owned</p>
+    <p>No crypto owned or still loading</p>
 {/if}

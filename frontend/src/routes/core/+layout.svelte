@@ -1,6 +1,6 @@
 <script>
     import '../app.css';
-    import {fetchBalance, updateBalance, resetBalance, logout} from '$lib/api.js';
+    import {fetchBalance, updateBalance, resetUser, logout} from '$lib/api.js';
     import {onMount} from "svelte";
     import {balance} from '$lib/stores/balanceStore.js';
 
@@ -22,8 +22,8 @@
     }
 
     async function handleReset() {
-        if (confirm("Are you sure you want to reset your balance?")) {
-            await resetBalance();
+        if (confirm("Are you sure you want to reset all your user data?")) {
+            await resetUser();
             balance.set(await fetchBalance());
         }
     }

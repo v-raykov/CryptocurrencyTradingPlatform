@@ -3,6 +3,6 @@
     import {goto} from '$app/navigation';
 
     onMount(() => {
-        goto('/cryptos');
+        goto('/core/cryptos');
     });
 </script>

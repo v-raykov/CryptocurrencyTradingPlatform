@@ -70,8 +70,8 @@ export async function updateBalance(amount) {
     });
 }
 
-export async function resetBalance() {
-    return await api.put('/user/balance/reset', null,{
+export async function resetUser() {
+    return await api.post('/user/reset', null,{
         headers: {
             Authorization: `Bearer ${getJWT()}`
         }
