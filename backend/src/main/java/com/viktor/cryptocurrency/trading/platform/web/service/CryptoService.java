@@ -11,15 +11,20 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CryptoService {
     private final CryptoRepository cryptoRepository;
+    private final CryptoLookupService cryptoLookupService;
     private final ApplicationEventPublisher publisher;
 
+    private final HashMap<String, String> symbolToName = new HashMap<>();
+
     public void saveCrypto(Crypto crypto) {
+        resolveAndSetName(crypto);
         cryptoRepository.save(crypto);
     }
 
@@ -59,6 +64,18 @@ public class CryptoService {
     private void validateAmount(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new InvalidAmountException();
+        }
+    }
+
+    private void resolveAndSetName(Crypto crypto) {
+        String symbol = crypto.getSymbol();
+        if (symbolToName.containsKey(symbol)) {
+            crypto.setName(symbolToName.get(symbol));
+        } else {
+            cryptoLookupService.getCryptoNameBySymbol(symbol).subscribe(name -> {
+                crypto.setName(name);
+                symbolToName.put(symbol, name);
+            });
         }
     }
 }

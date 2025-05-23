@@ -13,6 +13,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Crypto {
     private long cryptoId;
+    private String name;
     private String symbol;
     private double bid;
     private double ask;

@@ -24,6 +24,7 @@ public enum CryptoQueries {
     @Getter
     public enum fields {
         ID("crypto_id"),
+        NAME("name"),
         SYMBOL("symbol"),
         BID("bid"),
         ASK("ask"),
@@ -42,6 +43,7 @@ public enum CryptoQueries {
     public static Crypto map(ResultSet rs) throws SQLException {
         return new Crypto(
                 rs.getLong(fields.ID.name),
+                rs.getString(fields.NAME.name),
                 rs.getString(fields.SYMBOL.name),
                 rs.getDouble(fields.BID.name),
                 rs.getDouble(fields.ASK.name),
@@ -64,7 +66,7 @@ public enum CryptoQueries {
 
     private static List<fields> getFieldsToInsert() {
         return List.of(
-                fields.SYMBOL, fields.BID, fields.ASK, fields.LAST, fields.VOLUME, fields.LOW, fields.HIGH
+                fields.NAME, fields.SYMBOL, fields.BID, fields.ASK, fields.LAST, fields.VOLUME, fields.LOW, fields.HIGH
         );
     }
 

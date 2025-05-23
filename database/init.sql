@@ -11,6 +11,7 @@ CREATE TABLE User
 CREATE TABLE Crypto
 (
     crypto_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name      VARCHAR(50) UNIQUE NOT NULL,
     symbol    VARCHAR(50) UNIQUE NOT NULL,
     bid       DOUBLE PRECISION CHECK (bid >= 0),
     ask       DOUBLE PRECISION CHECK (ask >= 0),

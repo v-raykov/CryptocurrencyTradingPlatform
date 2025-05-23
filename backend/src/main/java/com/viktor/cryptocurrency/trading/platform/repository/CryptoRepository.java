@@ -31,6 +31,7 @@ public class CryptoRepository {
     public void save(Crypto crypto) {
         jdbcService.executeUpdate(
                 CryptoQueries.SAVE_CRYPTO.getQuery(),
+                crypto.getName(),
                 crypto.getSymbol(),
                 crypto.getBid(),
                 crypto.getAsk(),
