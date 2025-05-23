@@ -5,7 +5,7 @@
   - you can now open the frontend in the browser at [http://localhost:5173](http://localhost:5173)
 
 ## If you'd like to run without docker
-  - create MySQL database
+  - create a MySQL database using the DDL script found in the database folder
   - add the database configuration to application.properties
   - add an entry called `JWT_SECRET_KEY` holding a random Base64 key
   - run `mvn clean install` inside the backend directory
