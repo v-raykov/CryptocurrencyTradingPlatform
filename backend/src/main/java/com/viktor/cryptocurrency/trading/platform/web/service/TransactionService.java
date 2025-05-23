@@ -29,10 +29,9 @@ public class TransactionService {
     }
 
     private BigDecimal getProfitLoss(Transaction transaction) {
-        return transactionRepository.findAverageBuyPriceByUserAndCryptoId(transaction.getUserId(), transaction.getCryptoId()
-                )
+        return transaction.getAmount().multiply(transaction.getPriceAtTransaction())
                 .subtract(
-                        transaction.getAmount().multiply(transaction.getPriceAtTransaction())
-                );
+                        transactionRepository.findAverageBuyPriceByUserAndCryptoId(transaction.getUserId(), transaction.getCryptoId()
+                        ));
     }
 }
