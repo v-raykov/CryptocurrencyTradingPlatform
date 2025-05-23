@@ -165,18 +165,18 @@ RETURN result;
 END
 //
 
-CREATE FUNCTION get_average_transaction_cost(user_id BIGINT, crypto_id BIGINT)
+CREATE FUNCTION get_average_transaction_cost(p_user_id BIGINT, p_crypto_id BIGINT)
     RETURNS DECIMAL(20, 8)
     DETERMINISTIC
     READS SQL DATA
 BEGIN
     DECLARE avg_cost DECIMAL(20, 8);
 
-SELECT AVG(amount * price_at_transaction)
+SELECT SUM(amount * price_at_transaction) / SUM(amount)
 INTO avg_cost
 FROM Transaction
-WHERE user_id = user_id
-  AND crypto_id = crypto_id
+WHERE user_id = p_user_id
+  AND crypto_id = p_crypto_id
   AND transaction_type = 'BUY';
 
 RETURN avg_cost;
