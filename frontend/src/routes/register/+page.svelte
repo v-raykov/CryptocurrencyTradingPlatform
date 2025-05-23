@@ -18,7 +18,7 @@
             const response = await register(username, password);
 
             if (response.status === 201) {
-                await goto('/core/login');
+                await goto('/login');
             } else {
                 errorMessage = 'Registration failed. Please try again.';
             }
