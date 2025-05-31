@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,10 +17,10 @@ public class Crypto {
     private long cryptoId;
     private String name;
     private String symbol;
-    private double bid;
-    private double ask;
-    private double last;
-    private double volume;
-    private double low;
-    private double high;
+    private BigDecimal bid;
+    private BigDecimal ask;
+    private BigDecimal last;
+    private BigDecimal volume;
+    private BigDecimal low;
+    private BigDecimal high;
 }

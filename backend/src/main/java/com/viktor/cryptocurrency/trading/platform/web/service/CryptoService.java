@@ -43,7 +43,7 @@ public class CryptoService {
                 userId,
                 crypto.getCryptoId(),
                 amount,
-                BigDecimal.valueOf(crypto.getAsk()),
+                crypto.getAsk(),
                 Transaction.TransactionType.BUY
         )));
     }
@@ -51,7 +51,7 @@ public class CryptoService {
     public void sellCrypto(long userId, long cryptoId, BigDecimal amount) {
         validateAmount(amount);
         Crypto crypto = cryptoRepository.findById(cryptoId);
-        BigDecimal bid = BigDecimal.valueOf(crypto.getBid());
+        BigDecimal bid = crypto.getBid();
         publisher.publishEvent(new SellTransactionRequestedEvent(new Transaction(
                 userId,
                 crypto.getCryptoId(),

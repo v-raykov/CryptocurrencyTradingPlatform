@@ -45,12 +45,12 @@ public enum CryptoQueries {
                 rs.getLong(fields.ID.name),
                 rs.getString(fields.NAME.name),
                 rs.getString(fields.SYMBOL.name),
-                rs.getDouble(fields.BID.name),
-                rs.getDouble(fields.ASK.name),
-                rs.getDouble(fields.LAST.name),
-                rs.getDouble(fields.VOLUME.name),
-                rs.getDouble(fields.LOW.name),
-                rs.getDouble(fields.HIGH.name));
+                rs.getBigDecimal(fields.BID.name),
+                rs.getBigDecimal(fields.ASK.name),
+                rs.getBigDecimal(fields.LAST.name),
+                rs.getBigDecimal(fields.VOLUME.name),
+                rs.getBigDecimal(fields.LOW.name),
+                rs.getBigDecimal(fields.HIGH.name));
     }
 
     private static String buildUpsertQuery() {
