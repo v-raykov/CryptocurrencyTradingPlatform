@@ -13,13 +13,12 @@ CREATE TABLE Crypto
     crypto_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name      VARCHAR(50) UNIQUE NOT NULL,
     symbol    VARCHAR(50) UNIQUE NOT NULL,
-    bid       DOUBLE PRECISION CHECK (bid >= 0),
-    ask       DOUBLE PRECISION CHECK (ask >= 0),
-    last      DOUBLE PRECISION CHECK (last >= 0
-) ,
-    volume    DOUBLE PRECISION CHECK (volume >= 0),
-    low       DOUBLE PRECISION CHECK (low >= 0),
-    high      DOUBLE PRECISION CHECK (high >= 0)
+    bid       DECIMAL(20, 8) CHECK (bid >= 0),
+    ask       DECIMAL(20, 8) CHECK (ask >= 0),
+    last      DECIMAL(20, 8) CHECK (last >= 0),
+    volume    DECIMAL(20, 8) CHECK (volume >= 0),
+    low       DECIMAL(20, 8) CHECK (low >= 0),
+    high      DECIMAL(20, 8) CHECK (high >= 0)
 );
 
 -- Portfolio Table
@@ -50,7 +49,8 @@ CREATE TABLE Transaction
 
 -- Triggers for automatic balance and portfolio updates
 
-DELIMITER //
+DELIMITER
+//
 
 -- Trigger to update bank_balance after a BUY transaction
 CREATE TRIGGER update_bank_balance_after_buy
@@ -137,24 +137,13 @@ END IF;
 END
 //
 
-CREATE PROCEDURE reset_user_data(IN p_user_id BIGINT)
-BEGIN
-START TRANSACTION;
-
-DELETE FROM Portfolio WHERE user_id = p_user_id;
-DELETE FROM Transaction WHERE user_id = p_user_id;
-UPDATE User SET balance = 10000.0 WHERE user_id = p_user_id;
-
-COMMIT;
-END
-//
-
 CREATE FUNCTION get_transaction_cost(transaction_id BIGINT)
     RETURNS DECIMAL(20, 8)
     DETERMINISTIC
     READS SQL DATA
 BEGIN
-    DECLARE result DECIMAL(20, 8);
+    DECLARE
+result DECIMAL(20, 8);
 
 SELECT amount * price_at_transaction
 INTO result
@@ -170,7 +159,8 @@ CREATE FUNCTION get_average_transaction_cost(p_user_id BIGINT, p_crypto_id BIGIN
     DETERMINISTIC
     READS SQL DATA
 BEGIN
-    DECLARE avg_cost DECIMAL(20, 8);
+    DECLARE
+avg_cost DECIMAL(20, 8);
 
 SELECT SUM(amount * price_at_transaction) / SUM(amount)
 INTO avg_cost
@@ -187,9 +177,15 @@ CREATE PROCEDURE reset_user(IN p_user_id BIGINT)
 BEGIN
 START TRANSACTION;
 
-DELETE FROM Portfolio WHERE user_id = p_user_id;
-DELETE FROM Transaction WHERE user_id = p_user_id;
-UPDATE User SET balance = 10000.0 WHERE user_id = p_user_id;
+DELETE
+FROM Portfolio
+WHERE user_id = p_user_id;
+DELETE
+FROM Transaction
+WHERE user_id = p_user_id;
+UPDATE User
+SET balance = DEFAULT
+WHERE user_id = p_user_id;
 
 COMMIT;
 END
